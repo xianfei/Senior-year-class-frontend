@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资讯</title>
+    <link rel="stylesheet" href="./mdui/css/mdui.css" />
+    <link rel="stylesheet" href="mycss.css" />
+</head>
+
+<body>
+
+    <div id="xf-tab" style="width: 60%;position: fixed;margin-top: -48px">
+        <div class="mdui-tab" mdui-tab>
+            <a href="#example1-tab1" class="mdui-ripple" style="font-size: 18px">广场</a>
+            <a href="#example1-tab2" class="mdui-ripple" style="font-size: 18px">关注</a>
+        </div>
+    </div>
+
+    <div id="xf-contain">
+        <div id="example1-tab1" class="mdui-p-a-2">
+            <div id="test">
+                <div id="loadmore" style="text-align: center;"><div class="mdui-spinner mdui-spinner-colorful"></div><div style="padding-top:3px">正在加载……</div></div>
+            </div>
+        </div>
+        <div id="example1-tab2" class="mdui-p-a-2">
+            <div id="cyxz" class="mdui-appbar-with-tab">
+            </div>
+        </div>
+        <div id="example1-tab3" class="mdui-p-a-2">
+            <div id="zxxx" class="mdui-appbar-with-tab">
+            </div>
+        </div>
+        <script src="./mdui/js/mdui.js"></script>
+        <script src="jquery.js"></script>
+        <script>
+            var num = 0;
+            var isLoading = false;
+            addTenCard();
+            function addTenCard() {
+                isLoading = true;
+                $.ajax({
+                    type: 'POST',
+                    timeout : 5000,
+                    url: ajaxurl, data: { begin: num, end: num + 19 }, success: function (result) {
+                        console.log(result)
+                        document.getElementById('loadmore').remove();
+                        for (var res of result) {
+                            $('#test').append(String.raw`
+                <div style="margin: 0px -5px 10px -5px" class="mdui-card mdui-shadow-3" onclick="clickShow('${res.href}')">
+                 <div class="mdui-card-header">
+    <img class="mdui-card-header-avatar" src="avatar.jpg"/>
+    <div class="mdui-card-header-title">衔飞飞飞飞</div>
+    <div class="mdui-card-header-subtitle" style="margin-left:0;"><i class="mdui-icon material-icons" style="transform: scale(0.7);margin-top: -3px;color: #aaa">location_on</i>北京，海淀</div>
+  </div>
+                  <div class="mdui-card-primary-title" style="margin-left: 10px;font-size: 18px;">${res.title}！${res.text}</div>
+
+
+                    <div class="mdui-card-media test_img">
+                            <img src="${res.img}"/>
+                   </div><div class="mdui-card-header-subtitle" style="text-align: end;padding:5px 0 10px 0">
+<i class="mdui-icon material-icons">thumb_up</i> ${res.liked} &nbsp;&nbsp;&nbsp;&nbsp;
+<i class="mdui-icon material-icons">comment</i> ${res.comment}  &nbsp;&nbsp;&nbsp;&nbsp;
+
+
+                </div>`)
+                            num++;
+                        }
+                        $('#test').append('<div id="loadmore" style="text-align: center;"><div class="mdui-spinner mdui-spinner-colorful"></div><div style="padding-top:3px">正在加载更多内容</div></div>');
+                        mdui.mutation()
+                        setInterval(function () {
+                            isLoading = false;
+                        }, 2000)
+                    }, error: function (jqXHR, exception) {
+                        document.getElementById('loadmore').remove();
+                        var msg = '';
+                        if (exception === 'timeout') {
+                            msg = '连接超时.';
+                        } else if (jqXHR.status === 0) {
+                            msg = '无法连接到服务器.\n'+exception+'\n'+ajaxurl;
+                        } else if (jqXHR.status == 404) {
+                            msg = 'Requested page not found. [404]';
+                        } else if (jqXHR.status == 500) {
+                            msg = 'Internal Server Error [500].';
+                        } else if (exception === 'parsererror') {
+                            msg = 'Requested JSON parse failed.';
+                        } else if (exception === 'timeout') {
+                            msg = '连接超时.';
+                        } else if (exception === 'abort') {
+                            msg = 'Ajax request aborted.';
+                        } else {
+                            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                        }
+                        $('#test').append("服务器连接失败：" + msg);
+                    }});
+
+
+            }
+
+            $(window).scroll(function () {
+                var scrollTop = $(this).scrollTop();    //滚动条距离顶部的高度
+                var scrollHeight = $(document).height();   //当前页面的总高度
+                var clientHeight = $(this).height();    //当前可视的页面高度
+                // console.log("top:"+scrollTop+",doc:"+scrollHeight+",client:"+clientHeight);
+                if (scrollTop + clientHeight >= scrollHeight - 1) {   //距离顶部+当前高度 >=文档总高度 即代表滑动到底部 count++;         //每次滑动count加1
+                    // filterData(serviceTypeId, industryId, cityId, count); //调用筛选方法，count为当前分页数
+                    setTimeout(function () {
+                        if (!isLoading) {
+                            addTenCard()
+                            console.log('will log more')
+                        }
+                    }, 2000)
+                } else if (scrollTop <= 0) {
+                    //滚动条距离顶部的高度小于等于0 TODO
+                    //alert("下拉刷新，要在这调用啥方法？");
+                }
+            });
+        </script>
+    </div>
+</body>
+
+</html>

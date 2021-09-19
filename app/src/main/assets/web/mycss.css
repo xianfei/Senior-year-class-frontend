@@ -1,0 +1,38 @@
+.card-padding {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    display: grid;
+    grid-row-gap: 5px;
+}
+
+.glass {
+    background: rgba(255,255,255, 1);
+    color:#555;
+}
+
+@supports (-webkit-backdrop-filter: blur(25px) saturate(150%)) or (backdrop-filter: blur(25px) saturate(150%)){
+  /* 支持 backdrop-filter 时应用的效果，记得把一些属性覆盖掉 */
+  .glass {
+    background: rgba(255,255,255, 0.85);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    color:#444;
+  }
+}
+
+.test_img{
+  height: 200px;
+}
+
+.test_img img{
+    width:calc(100% - 10px);
+    height: calc(100% - 10px);
+    padding: 5px;
+    object-fit:cover;
+  }
+
+#popup::-webkit-scrollbar {
+  display: none;
+}

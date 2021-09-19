@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="mdui/css/mdui.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #touxiang {
+            position: relative;
+            margin-top: 28px;
+            margin-left: 40px;
+            height: 80px;
+            width: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .userinfo {
+            position: relative;
+            margin-top: -70px;
+            margin-left: 140px;
+        }
+
+        #username {
+            position: absolute;
+            margin-top: 0px;
+            margin-left: 0px;
+            font-size: 30px;
+            color: #666;
+        }
+
+        #desc {
+            position: absolute;
+            padding-top: 40px;
+            margin-left: 0px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <img id="touxiang" class="mdui-shadow-4" src="avatar.jpg"></img>
+    <div class="userinfo">
+        <span id="username">衔飞飞飞飞</span>
+        <span id="desc">全栈工程师/架构师</span>
+    </div>
+    <div class="mdui-shadow-4" style="margin-top: 90px;height:25px;margin-left: 20px;margin-right: 20px;">
+        为您推荐职业：<br>123<br>
+    </div>
+    <ul class="mdui-list" style="padding-top: 120px;padding-left: 20px;padding-right: 20px;">
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">move_to_inbox</i>
+            <div class="mdui-list-item-content">修改信息</div>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">send</i>
+            <div class="mdui-list-item-content">这是一个箭头</div>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">delete</i>
+            <div class="mdui-list-item-content">退出登录</div>
+        </li>
+        <li class="mdui-list-item mdui-ripple" onclick="alert('Demo App by xianfei')">
+            <i class="mdui-list-item-icon mdui-icon material-icons">error</i>
+            <div class="mdui-list-item-content">关于</div>
+        </li>
+
+    </ul>
+</body>
+
+</html>

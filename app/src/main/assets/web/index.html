@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xianfei's app</title>
+    <link rel="stylesheet" href="mdui/css/mdui.css" />
+    <link rel="stylesheet" href="mycss.css" />
+    <script src="mdui/js/mdui.js"></script>
+    <script src="myapp.js"></script>
+    <script src="jquery.js"></script>
+</head>
+
+<body class="mdui-bottom-nav-fixed mdui-theme-primary-blue">
+    <div id="tabbar" class="mdui-appbar mdui-appbar-fixed glass mdui-shadow-0">
+        <div id="statpadding" style="height: 30px;"></div>
+        <div class="mdui-toolbar">
+            <a href="javascript:;" class="mdui-typo-title" id="app-title">My Application</a>
+            <div class="mdui-toolbar-spacer"></div>
+<!--            <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>-->
+            <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">add_circle_outline</i></a>
+        </div>
+        <div id="mytab" style="box-shadow:  0 4px 5px 0 rgba(0, 0, 0, 0.12) !important;">
+        </div>
+        <!-- <div class="mdui-tab" mdui-tab>
+            <a href="#example3-tab1" class="mdui-ripple mdui-ripple-white">web</a>
+            <a href="#example3-tab1" class="mdui-ripple mdui-ripple-white">shopping</a>
+            <a href="#example3-tab1" class="mdui-ripple mdui-ripple-white">videos</a>
+        </div> -->
+    </div>
+
+    <div id="contents" style="padding-top: 86px;">
+        <!--padding-top: 56+20 -->
+
+    </div>
+
+    <div class="mdui-dialog mdui-shadow-4" id="popup" style="left: 0;right: 0;top: 0;bottom: 0;margin: auto;margin: auto;box-sizing: border-box;overflow: scroll;border-radius: 15px;padding:10px ">
+
+    </div>
+
+    <div id="navibar" class="mdui-bottom-nav glass mdui-shadow-8" style="padding-bottom: 10px">
+        <a onclick="zixun()" class="mdui-ripple mdui-bottom-nav-active">
+            <i class="mdui-icon material-icons">home</i>
+            <label>发现</label>
+        </a>
+        <a onclick="xiaoxi()" class="mdui-ripple">
+            <i class="mdui-icon material-icons">message</i>
+            <label>聊天</label>
+        </a>
+        <a onclick="wode()" class="mdui-ripple">
+            <i class="mdui-icon material-icons">person</i>
+            <label>我的</label>
+        </a>
+    </div>
+    <script>zixun()</script>
+</body>
+
+</html>
