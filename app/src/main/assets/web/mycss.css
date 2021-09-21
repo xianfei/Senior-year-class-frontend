@@ -15,23 +15,36 @@
 @supports (-webkit-backdrop-filter: blur(25px) saturate(150%)) or (backdrop-filter: blur(25px) saturate(150%)){
   /* 支持 backdrop-filter 时应用的效果，记得把一些属性覆盖掉 */
   .glass {
-    background: rgba(255,255,255, 0.85);
+    background: rgba(255,255,255, 0.88);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     backdrop-filter: blur(20px) saturate(180%);
     color:#444;
   }
 }
 
+.xfshadow{
+     box-shadow:  0 2px 1px 0 rgba(0, 0, 0, 0.05);
+}
+
 .test_img{
-  height: 200px;
 }
 
 .test_img img{
-    width:calc(100% - 10px);
-    height: calc(100% - 10px);
-    padding: 5px;
+    width:calc(100% - 20px);
+    height: calc(100% - 20px);
+    max-height: calc(100vw - 20px);
+    padding: 10px;
     object-fit:cover;
+    border-radius: 15px;
   }
+
+.test_iframe{
+    width:calc(100% - 20px);
+    height: calc(75vw);
+    padding: 10px;
+    border-radius: 15px;
+    border: none;
+}
 
 #popup::-webkit-scrollbar {
   display: none;

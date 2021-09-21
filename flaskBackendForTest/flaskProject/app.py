@@ -71,21 +71,23 @@ strs = ['玲珑骰子安红豆，入骨相思知不知？————温廷筠�
         '猫扑上某人，新处一女友，郎情妾意，欲去女友家里拜访，女友知其嘴里动辄脏话，于是反复叮咛不可胡言，某人欣然允诺。待见面之后，某人应答自如，并无露馅，女友父母甚为满意。晚饭后，时至寒冬，女友父母亦执意相送至路边，某人颇为感动，头脑一热，脱口而出：“叔，别送了，快回去吧，瞧给我姨冻那个逼样！”'
         ]
 
+
 @app.route('/getnews', methods=['POST'])
 def hello_world():
     items = []
     begin = int(request.form['begin'])
     end = int(request.form['end'])
+    time = int(request.form['time'])
     for i in range(begin, end + 1):
         text = random.choice(strs)
         img = "http://192.168.2.208:8808/static/imgs/" + str(random.randint(1, 74)) + '.jpg'
-        items.append({'index': i, 'text': text, 'img': img, 'title': '我是第'+str(i)+'条消息',
-                      'href': 'http://192.168.2.208:8808/static/test/appdetail.html','liked':random.randint(0,5),
-                      'comment':random.randint(0,5)})
+        items.append({'index': i, 'text': text if i%5!=2 else '这是一条卡片交互程序测试动态', 'img': img, 'title': '我是第' + str(i) + '条消息',
+                      'href': 'http://192.168.2.208:8808/static/test/appdetail.html', 'liked': random.randint(0, 5),
+                      'comment': random.randint(0, 5), 'time': (time-i*21987),'attachmentType':(1 if i%5==2 else 3),
+                      "attachment":"http://192.168.2.208:8808/static/2048/index.html"},
+                     )
     return jsonify(items)
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8808, debug=True)
-
-

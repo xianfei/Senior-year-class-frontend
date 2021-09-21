@@ -10,17 +10,19 @@
     <style>
         #touxiang {
             position: relative;
-            margin-top: 28px;
+            margin-top: 20px;
             margin-left: 40px;
             height: 80px;
             width: 80px;
             border-radius: 50%;
             overflow: hidden;
+            z-index: 1000001;
+
         }
 
         .userinfo {
             position: relative;
-            margin-top: -70px;
+            margin-top: -50px;
             margin-left: 140px;
         }
 
@@ -28,29 +30,21 @@
             position: absolute;
             margin-top: 0px;
             margin-left: 0px;
-            font-size: 30px;
+            font-size: 22px;
+            font-weight: bold;
             color: #666;
         }
 
-        #desc {
-            position: absolute;
-            padding-top: 40px;
-            margin-left: 0px;
-            color: #888;
-        }
+
     </style>
 </head>
 
 <body>
-    <img id="touxiang" class="mdui-shadow-4" src="avatar.jpg"></img>
+    <img id="touxiang" class="mdui-shadow-4" src="avatar.jpg">
     <div class="userinfo">
         <span id="username">衔飞飞飞飞</span>
-        <span id="desc">全栈工程师/架构师</span>
     </div>
-    <div class="mdui-shadow-4" style="margin-top: 90px;height:25px;margin-left: 20px;margin-right: 20px;">
-        为您推荐职业：<br>123<br>
-    </div>
-    <ul class="mdui-list" style="padding-top: 120px;padding-left: 20px;padding-right: 20px;">
+    <ul class="mdui-list" style="padding-top: 80px;padding-left: 30px;padding-right: 30px;">
         <li class="mdui-list-item mdui-ripple">
             <i class="mdui-list-item-icon mdui-icon material-icons">move_to_inbox</i>
             <div class="mdui-list-item-content">修改信息</div>

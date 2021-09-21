@@ -1,22 +1,23 @@
-var ajaxurl='http://127.0.0.1:8808/getnews';
+var ajaxurl='http://'+(location.search.substr(1)===''?'127.0.0.1:8808':decodeURIComponent(location.search.substr(1)))+'/getnews';
 
 function zixun(){
     $('#xf-tab').remove()
     $('#contents').load('zixun.html',function(){$('#mytab').append($('#xf-tab'));});
     $('#app-title').text('')
-    $('#tabbar').removeClass("mdui-shadow-3")
+    $('#tabbar').removeClass("xfshadow")
     $('#tabbar').removeClass("mdui-shadow-0")
-    $('#tabbar').addClass("mdui-shadow-3")
+    $('#tabbar').addClass("xfshadow")
     $('body').css('background','#fafafa')
 }
 
 function wode(){
     $('#xf-tab').remove()
+    $('#app-title').text('')
     $('#contents').load('my.html',function(){$('#mytab').append($('#xf-tab'));});
     $('body').css('background','#fff')
-    $('#tabbar').removeClass("mdui-shadow-3")
+    $('#tabbar').removeClass("xfshadow")
     $('#tabbar').removeClass("mdui-shadow-0")
-        $('#tabbar').addClass("mdui-shadow-0")
+    $('#tabbar').addClass("mdui-shadow-0")
 
 
 }
@@ -26,7 +27,7 @@ function xiaoxi(){
     $('#contents').load('xiaoxi.html',function(){$('#mytab').append($('#xf-tab'));});
     $('#app-title').text('私聊')
     $('body').css('background','#fff')
-    $('#tabbar').removeClass("mdui-shadow-3")
+    $('#tabbar').removeClass("xfshadow")
     $('#tabbar').removeClass("mdui-shadow-0")
         $('#tabbar').addClass("mdui-shadow-0")
 
@@ -54,4 +55,25 @@ function backCallback(){
     if(mydialog.getState()==="closed")return 'exit';
     else mydialog.close();
     return '';
+}
+
+Date.prototype.format = function(fmt) {
+     var o = {
+        "M+" : this.getMonth()+1,                 //月份
+        "d+" : this.getDate(),                    //日
+        "h+" : this.getHours(),                   //小时
+        "m+" : this.getMinutes(),                 //分
+        "s+" : this.getSeconds(),                 //秒
+        "q+" : Math.floor((this.getMonth()+3)/3), //季度
+        "S"  : this.getMilliseconds()             //毫秒
+    };
+    if(/(y+)/.test(fmt)) {
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+    }
+     for(var k in o) {
+        if(new RegExp("("+ k +")").test(fmt)){
+             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+         }
+     }
+    return fmt;
 }
