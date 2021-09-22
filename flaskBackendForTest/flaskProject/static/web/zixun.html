@@ -38,6 +38,8 @@
     <script src="./mdui/js/mdui.js"></script>
     <script src="jquery.js"></script>
     <script>
+        var currentID = -1;
+        var currentMoment = '';
         var num = 0;
         var loadtime = new Date().getTime();
         var isLoading = false;
@@ -65,7 +67,7 @@
                    </iframe>
                          `
                         $('#test').append(String.raw`
-                <div style="margin: 0px -15px 10px -15px" class="mdui-card mdui-shadow-3">
+                <div style="margin: 0px -15px 10px -15px" class="mdui-card mdui-shadow-3" onclick="currentMoment = this.innerHTML;clickShow('detail.html');currentID = ${res.momentID}">
                  <div class="mdui-card-header">
     <img class="mdui-card-header-avatar" src="avatar.jpg"/>
     <div class="mdui-card-header-title">衔飞飞飞飞</div>

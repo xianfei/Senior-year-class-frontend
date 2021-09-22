@@ -41,6 +41,7 @@
 .test_iframe{
     width:calc(100% - 20px);
     height: calc(75vw);
+    max-height: 350px;
     padding: 10px;
     border-radius: 15px;
     border: none;

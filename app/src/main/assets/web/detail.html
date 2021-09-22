@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./mdui/css/mdui.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <script src="jquery.js"></script>
+<div id="target">
+</div>
+    <div class="mdui-row mdui-row-gapless" style="margin: 10px">
+  <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red-400" style="margin-top: -80px" onclick="prompt('举报##请输入举报理由，如放弃举报请点击取消')">举报动态</button>
+          <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-blue-600" style="margin-top: -80px" onclick="prompt('评论##请输入评论内容')">发表评论</button>
+
+        <div id="comment" >暂无评论</div>
+</div>
+<script>
+    $('#target').html(currentMoment)
+</script>
+</body>
+</html>

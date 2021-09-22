@@ -81,7 +81,7 @@ def hello_world():
     for i in range(begin, end + 1):
         text = random.choice(strs)
         img = "http://192.168.2.208:8808/static/imgs/" + str(random.randint(1, 74)) + '.jpg'
-        items.append({'index': i, 'text': text if i%5!=2 else '这是一条卡片交互程序测试动态', 'img': img, 'title': '我是第' + str(i) + '条消息',
+        items.append({'momentID':123+i,'index': i, 'text': text if i%5!=2 else '这是一条卡片交互程序测试动态', 'img': img, 'title': '我是第' + str(i) + '条消息',
                       'href': 'http://192.168.2.208:8808/static/test/appdetail.html', 'liked': random.randint(0, 5),
                       'comment': random.randint(0, 5), 'time': (time-i*21987),'attachmentType':(1 if i%5==2 else 3),
                       "attachment":"http://192.168.2.208:8808/static/2048/index.html"},

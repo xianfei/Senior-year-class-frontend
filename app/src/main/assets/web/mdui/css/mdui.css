@@ -416,6 +416,7 @@ body.mdui-locked {
   -webkit-transition-property: opacity, visibility;
   transition-property: opacity, visibility;
   will-change: opacity;
+  backdrop-filter:blur(5px);
 }
 /* 显示遮罩层 */
 .mdui-overlay-show {
@@ -10940,11 +10941,6 @@ select.mdui-select[multiple] option:last-child {
  */
 .mdui-card-media {
   position: relative;
-}
-.mdui-card-media img,
-.mdui-card-media video {
-  display: block;
-  width: 100%;
 }
 /* 覆盖在媒体元素上的内容 */
 .mdui-card-media-covered {

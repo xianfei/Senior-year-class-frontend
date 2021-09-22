@@ -1,18 +1,12 @@
 package com.example.myapplication;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.JsPromptResult;
@@ -23,10 +17,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnKeyListener;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +26,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -182,9 +174,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        AtomicBoolean shouldRet = new AtomicBoolean(true);
         if(mWebView.canGoBack()){
             mWebView.goBack();
-        }else super.onBackPressed();
+            return;
+        }else{mWebView.evaluateJavascript("javascript:backCallback()", value -> {
+            if (value.contains("exit")) super.onBackPressed();
+            else shouldRet.set(false);
+        });
+        }
+        if (shouldRet.get())super.onBackPressed();
     }
 
     private int getStatusBarHeight() {
