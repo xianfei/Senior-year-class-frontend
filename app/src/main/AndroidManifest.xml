@@ -12,6 +12,7 @@
         android:hardwareAccelerated="true"
         android:theme="@style/TranslucentTheme">
         <activity android:name=".MainActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.MyApplication">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

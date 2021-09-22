@@ -2,12 +2,16 @@ var ajaxurl='http://'+(location.search.substr(1)===''?'127.0.0.1:8808':decodeURI
 
 function zixun(){
     $('#xf-tab').remove()
-    $('#contents').load('zixun.html',function(){$('#mytab').append($('#xf-tab'));});
+    $('#contents').load('zixun.html',function(){
+        $('#mytab').append($('#xf-tab'));
+    });
     $('#app-title').text('')
     $('#tabbar').removeClass("xfshadow")
     $('#tabbar').removeClass("mdui-shadow-0")
     $('#tabbar').addClass("xfshadow")
     $('body').css('background','#fafafa')
+    localStorage.setItem("lastPage","zixun")
+
 }
 
 function wode(){
@@ -18,6 +22,7 @@ function wode(){
     $('#tabbar').removeClass("xfshadow")
     $('#tabbar').removeClass("mdui-shadow-0")
     $('#tabbar').addClass("mdui-shadow-0")
+    localStorage.setItem("lastPage","wode")
 
 
 }
@@ -30,7 +35,7 @@ function xiaoxi(){
     $('#tabbar').removeClass("xfshadow")
     $('#tabbar').removeClass("mdui-shadow-0")
         $('#tabbar').addClass("mdui-shadow-0")
-
+    localStorage.setItem("lastPage","xiaoxi")
 }
 
 function changeSize(stat,nav){
@@ -42,6 +47,7 @@ function changeSize(stat,nav){
 var mydialog;
 window.onload = ()=>{
     mydialog = new mdui.Dialog('#popup');
+
 
 }
 

@@ -41,7 +41,7 @@
         var num = 0;
         var loadtime = new Date().getTime();
         var isLoading = false;
-        addTenCard();
+        if(localStorage.getItem("lastPage")=='zixun'){addTenCard();
 
         function addTenCard() {
             isLoading = true;
@@ -130,7 +130,7 @@
                 //滚动条距离顶部的高度小于等于0 TODO
                 // alert("下拉刷新？");
             }
-        });
+        });}
     </script>
 </div>
 </body>

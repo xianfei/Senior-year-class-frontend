@@ -40,20 +40,26 @@
     </div>
 
     <div id="navibar" class="mdui-bottom-nav glass mdui-shadow-8" style="padding-bottom: 10px">
-        <a onclick="zixun()" class="mdui-ripple mdui-bottom-nav-active">
+        <a onclick="zixun()" class="mdui-ripple" id="zixunTab">
             <i class="mdui-icon material-icons">home</i>
             <label>主页</label>
         </a>
-        <a onclick="xiaoxi()" class="mdui-ripple">
+        <a onclick="xiaoxi()" class="mdui-ripple" id="xiaoxiTab">
             <i class="mdui-icon material-icons">inbox</i>
             <label>聊天</label>
         </a>
-        <a onclick="wode()" class="mdui-ripple">
+        <a onclick="wode()" class="mdui-ripple" id="wodeTab">
             <i class="mdui-icon material-icons">insert_emoticon</i>
             <label>我的</label>
         </a>
     </div>
-    <script>zixun()</script>
+    <script>
+        if(localStorage.getItem("lastPage")!=null){
+            $("#"+localStorage.getItem("lastPage")+"Tab").click();
+          $("#"+localStorage.getItem("lastPage")+"Tab").addClass('mdui-bottom-nav-active')
+        }
+        else zixun()
+    </script>
 </body>
 
 </html>
