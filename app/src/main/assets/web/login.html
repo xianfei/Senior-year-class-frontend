@@ -1,0 +1,278 @@
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign in</title>
+        <style type="text/css">
+            body {
+                background: linear-gradient(45deg, #f2994a 0%, #f2c94c 100%);
+                font-family: 'Ubuntu', sans-serif;
+            }
+
+            .main {
+                background-color: #FFFFFF;
+                width: 300px;
+                margin: 7em auto;
+                border-radius: 1.5em;
+                box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+            }
+
+            .sign {
+                padding-top: 40px;
+                color: #f7a63c;
+                font-family: 'Ubuntu', sans-serif;
+                font-weight: bold;
+                font-size: 28px;
+            }
+
+            .sign2 {
+                padding-top: 0px;
+                color: #CCCCCC;
+                font-family: 'Ubuntu', sans-serif;
+                font-weight: bold;
+                font-size: 16px;
+            }
+
+            .un {
+                width: 76%;
+                color: rgb(38, 50, 56);
+                font-weight: 700;
+                font-size: 14px;
+                letter-spacing: 1px;
+                background: rgba(136, 126, 126, 0.04);
+                padding: 10px 20px;
+                border: none;
+                border-radius: 20px;
+                outline: none;
+                box-sizing: border-box;
+                border: 2px solid rgba(0, 0, 0, 0.02);
+                margin-bottom: 50px;
+                margin-left: 36px;
+                text-align: center;
+                margin-bottom: 27px;
+                font-family: 'Ubuntu', sans-serif;
+            }
+
+            form.form1 {
+                padding-top: 20px;
+            }
+
+            .pass {
+                width: 76%;
+                color: rgb(38, 50, 56);
+                font-weight: 700;
+                font-size: 14px;
+                letter-spacing: 1px;
+                background: rgba(136, 126, 126, 0.04);
+                padding: 10px 20px;
+                border: none;
+                border-radius: 20px;
+                outline: none;
+                box-sizing: border-box;
+                border: 2px solid rgba(0, 0, 0, 0.02);
+                margin-bottom: 50px;
+                margin-left: 36px;
+                text-align: center;
+                margin-bottom: 27px;
+                font-family: 'Ubuntu', sans-serif;
+            }
+
+            .pass:focus {
+                border: 2px solid rgba(0, 0, 0, 0.18) !important;
+
+            }
+
+            .submit {
+                cursor: pointer;
+                border-radius: 5em;
+                color: #fff;
+                background: linear-gradient(90deg, #ff7e5f 0%, #feb47b 100%);
+                border: 0;
+                padding-left: 40px;
+                padding-right: 40px;
+                padding-bottom: 10px;
+                padding-top: 10px;
+                font-family: 'Ubuntu', sans-serif;
+                margin-left: 30%;
+                font-size: 13px;
+                box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+            }
+
+            .submit2 {
+                cursor: pointer;
+                border-radius: 5em;
+                color: #fff;
+                background: linear-gradient(270deg, #d66d75 0%, #e29587 100%);
+                border: 0;
+                padding-left: 40px;
+                padding-right: 40px;
+                padding-bottom: 10px;
+                padding-top: 10px;
+                font-family: 'Ubuntu', sans-serif;
+                margin-left: 30%;
+                font-size: 13px;
+                box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+            }
+
+            .forgot {
+                text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
+                color: #E1BEE7;
+                padding-top: 15px;
+            }
+
+            a {
+                text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
+                color: #E1BEE7;
+                text-decoration: none
+            }
+
+
+        </style>
+        <script src="jquery.js"></script>
+    </head>
+
+<body>
+<div style="width: 100%;height: 100%;position: fixed;overflow:scroll;background: linear-gradient(45deg, #f2994a 0%, #f2c94c 100%);">
+
+    <div class="main">
+        <div style="text-align: center;">
+            <img src="cat.png" style="width: 120px;margin: -60px auto;filter:sepia(0.7);">
+        </div>
+        <p class="sign" align="center">奶黄喵</p>
+        <p class="sign2" align="center">比斯兔开发组作品</p>
+        <form id="myform" class="form1">
+            <input class="pass" id="phone" type="text" align="center" placeholder="手机号">
+            <input class="pass" id="password" type="password" align="center" placeholder="密码">
+            <div id="regdiv" style="display: none;">
+                <input class="pass" id="password2" type="password" align="center" placeholder="确认密码">
+                <input class="pass" id="name" type="text" align="center" placeholder="昵称">
+                <div style="text-align: center;">
+                    性别：<input type="checkbox" id="male" checked><label for="male">男</label>
+                    <input type="checkbox" id="female"><label for="female">女</label><br><br>
+                    <input type="checkbox" id="agree"><label for="agree">我同意用户协议</label>
+                </div>
+            </div>
+            <br><br>
+            <a class="submit" id="login" align="center" onclick="$('#login').html().indexOf('登录')!==-1?login():reg()"> &nbsp;&nbsp;登录&nbsp;&nbsp; </a><br><br><br>
+            <a class="submit2" align="center" onclick="register(this)"> &nbsp;&nbsp;注册&nbsp;&nbsp; </a><br><br><br>
+        </form>
+
+    </div>
+</div>
+
+</body>
+
+<script>
+    function login() {
+        $.ajax({
+            url: "http://39.106.25.203:1480/user/logIn",
+            data: {userId: $('#phone').val(), password: $('#password').val()},
+            type: "POST",
+            success: function (result) {
+                console.log(result)
+                if (result.result.status) {
+                    mdui.snackbar({
+                        message: "登录成功！"
+                    });
+                    localStorage.setItem("loginUser", result.result.message.userID)
+                    $('#xf-frame').fadeOut(800)
+                } else {
+                    mdui.snackbar({
+                        message: result.result.message
+                    });
+                }
+
+            },
+            error:function (err){
+                console.log(err)
+                mdui.snackbar({
+                        message: err.responseText
+                    });
+            }
+        });
+    }
+
+    function reg(){
+        if($('#password').val()!==$('#password2').val()){
+            mdui.snackbar({
+                        message: "两次输入的密码不一致！"
+                    });
+            return;
+        }
+        if(!$("#agree").prop('checked')){
+            mdui.snackbar({
+                        message: "您必须同意用户协议"
+                    });
+            return;
+        }
+        if($("#female").prop('checked')&&$("#male").prop('checked')){
+            mdui.snackbar({
+                        message: "您只能选择一个性别！"
+                    });
+            return;
+        }
+        if(!$("#female").prop('checked')&&!$("#male").prop('checked')){
+            mdui.snackbar({
+                        message: "您必须选择一个性别！"
+                    });
+            return;
+        }
+        $.ajax({
+            url: "http://39.106.25.203:1480/user/register",
+            data: {userId: $('#phone').val(), password: $('#password').val(), isMale:$("#male").prop('checked')?"male":"female", userName:$('#name').val()},
+            type: "POST",
+            success: function (result) {
+                console.log(result)
+                if (result.result.status) {
+                    mdui.snackbar({
+                        message: "注册成功！"
+                    });
+                    localStorage.setItem("loginUser", result.result.message.userID)
+                    $('#xf-frame').fadeOut(800)
+                } else {
+                    mdui.snackbar({
+                        message: result.result.message
+                    });
+                }
+
+            },
+            error:function (err){
+                console.log(err)
+                mdui.snackbar({
+                        message: err.responseText
+                    });
+            }
+        });
+    }
+
+    function register(obj) {
+        if (obj.innerHTML == "← 返回") {
+            $("#regdiv").hide(800)
+            obj.innerHTML = "&nbsp;&nbsp;注册&nbsp;&nbsp;"
+            $('#login').html("&nbsp;&nbsp;登录&nbsp;&nbsp;")
+        } else {
+            console.log(obj)
+            obj.innerHTML = "← 返回"
+            $('#login').html("&nbsp;&nbsp;提交&nbsp;&nbsp;")
+            $("#regdiv").show(800)
+        }
+
+    }
+
+    function Enter(e) {
+
+        var name = document.getElementById("input-name").value;
+        var aca = document.getElementById("input-aca").value;
+        var number = document.getElementById("input-number").value;
+        var url = "./main.html?e=" + e + "&name=" + encodeURI(name) + "&aca=" + encodeURI(aca) + "&no=" + number
+            + "&hideup=" + (document.getElementById("hideup").checked ? "1" : "0")
+            + "&showcolor=" + (document.getElementById("showcolor").checked ? "1" : "0");
+        window.open(url);
+
+    }
+</script>
+
+</html>
+    

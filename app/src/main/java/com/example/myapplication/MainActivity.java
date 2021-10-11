@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     WebView mWebView;
 
-    String serverAddr = "192.168.2.208:8808";
+    String serverAddr = "127.0.0.1:8808";
 
 
     @Override

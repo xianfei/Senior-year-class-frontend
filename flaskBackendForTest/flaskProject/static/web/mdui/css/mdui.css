@@ -12253,6 +12253,7 @@ body.mdui-loaded .mdui-drawer {
 .mdui-snackbar-left-bottom,
 .mdui-snackbar-right-bottom {
   bottom: 0;
+  padding-bottom: var(--bottom-bar-height);
 }
 .mdui-snackbar-top,
 .mdui-snackbar-left-top,

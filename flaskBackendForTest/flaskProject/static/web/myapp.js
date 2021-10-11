@@ -43,6 +43,8 @@ function changeSize(stat,nav){
     $('#contents').css('padding-top',''+(stat+56)+'px');
     $('#contents').css('padding-bottom',''+nav+'px');
     $('#navibar').css('padding-bottom',''+nav+'px');
+    $('body').css('--top-bar-height',''+stat+'px')
+    $('body').css('--bottom-bar-height',''+nav+'px')
 }
 var mydialog;
 window.onload = ()=>{

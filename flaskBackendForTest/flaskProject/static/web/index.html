@@ -6,60 +6,108 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xianfei's app</title>
-    <link rel="stylesheet" href="mdui/css/mdui.css" />
-    <link rel="stylesheet" href="mycss.css" />
+    <link rel="stylesheet" href="mdui/css/mdui.css"/>
+    <link rel="stylesheet" href="mycss.css"/>
     <script src="mdui/js/mdui.js"></script>
     <script src="myapp.js"></script>
     <script src="jquery.js"></script>
 </head>
 
-<body class="mdui-bottom-nav-fixed mdui-theme-primary-blue">
-    <div id="tabbar" class="mdui-appbar mdui-appbar-fixed glass mdui-shadow-0">
-        <div id="statpadding" style="height: 0px;"></div>
-        <div class="mdui-toolbar">
-            <a href="javascript:;" class="mdui-typo-title" id="app-title">My Application</a>
-            <div class="mdui-toolbar-spacer"></div>
-            <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons" style="margin-top: 3px">add</i></a>
-        </div>
-        <div id="mytab">
-        </div>
-        <!-- <div class="mdui-tab" mdui-tab>
-            <a href="#example3-tab1" class="mdui-ripple mdui-ripple-white">web</a>
-            <a href="#example3-tab1" class="mdui-ripple mdui-ripple-white">shopping</a>
-            <a href="#example3-tab1" class="mdui-ripple mdui-ripple-white">videos</a>
-        </div> -->
+<body class="mdui-bottom-nav-fixed mdui-theme-primary-orange">
+<div id="tabbar" class="mdui-appbar mdui-appbar-fixed glass mdui-shadow-0">
+    <div id="statpadding" style="height: 0px;"></div>
+    <div class="mdui-toolbar">
+        <a href="javascript:;" class="mdui-typo-title" id="app-title">My Application</a>
+        <div class="mdui-toolbar-spacer"></div>
+            <ul class="mdui-menu" id="menu">
+                <li class="mdui-menu-item">
+                    <a href="javascript:;" class="mdui-ripple">发送文字</a>
+                </li>
+                <li class="mdui-menu-item">
+                    <a href="javascript:;" class="mdui-ripple">发送图片及文字</a>
+                </li>
+                <li class="mdui-menu-item">
+                    <a href="javascript:;" class="mdui-ripple">发送视频及文字</a>
+                </li>
+                <li class="mdui-menu-item">
+                    <a href="javascript:;" class="mdui-ripple">发送程序及文字</a>
+                </li>
+            </ul>
+        <a id="add-button" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons"
+                                                       style="margin-top: 3px">add</i></a>
     </div>
-
-    <div id="contents" style="padding-top: 56px;margin: auto;max-width: 450px;">
-        <!--padding-top: 56+20 -->
-
+    <div id="mytab">
     </div>
+    <!-- <div class="mdui-tab" mdui-tab>
+        <a href="#example3-tab1" class="mdui-ripple mdui-ripple-white">web</a>
+        <a href="#example3-tab1" class="mdui-ripple mdui-ripple-white">shopping</a>
+        <a href="#example3-tab1" class="mdui-ripple mdui-ripple-white">videos</a>
+    </div> -->
+</div>
 
-    <div class="mdui-dialog mdui-shadow-4" id="popup" style="left: 0;right: 0;top: 0;bottom: 0;margin: auto;box-sizing: border-box;overflow: scroll;border-radius: 15px;padding:2px;width: 95%;max-width: 450px;">
+<div id="xf-frame" style="width: 100%;height: 100%;z-index: 1000;position: fixed;background: white;display: none;overflow: scroll;"></div>
 
-    </div>
+<div id="contents" style="padding-top: 56px;margin: auto;max-width: 450px;">
+    <!--padding-top: 56+20 -->
 
-    <div id="navibar" class="mdui-bottom-nav glass mdui-shadow-8" style="padding-bottom: 0px">
-        <a onclick="zixun()" class="mdui-ripple" id="zixunTab">
-            <i class="mdui-icon material-icons">home</i>
-            <label>主页</label>
-        </a>
-        <a onclick="xiaoxi()" class="mdui-ripple" id="xiaoxiTab">
-            <i class="mdui-icon material-icons">inbox</i>
-            <label>聊天</label>
-        </a>
-        <a onclick="wode()" class="mdui-ripple" id="wodeTab">
-            <i class="mdui-icon material-icons">insert_emoticon</i>
-            <label>我的</label>
-        </a>
-    </div>
-    <script>
-        if(localStorage.getItem("lastPage")!=null){
-            $("#"+localStorage.getItem("lastPage")+"Tab").click();
-          $("#"+localStorage.getItem("lastPage")+"Tab").addClass('mdui-bottom-nav-active')
-        }
-        else zixun()
-    </script>
+</div>
+
+<div class="mdui-dialog mdui-shadow-4" id="popup"
+     style="left: 0;right: 0;top: 0;bottom: 0;margin: auto;box-sizing: border-box;overflow: scroll;border-radius: 15px;padding:2px;width: 95%;max-width: 450px;">
+
+</div>
+
+<div id="navibar" class="mdui-bottom-nav glass mdui-shadow-8" style="padding-bottom: 0px">
+    <a onclick="zixun()" class="mdui-ripple" id="zixunTab">
+        <i class="mdui-icon material-icons">home</i>
+        <label>主页</label>
+    </a>
+    <a onclick="xiaoxi()" class="mdui-ripple" id="xiaoxiTab">
+        <i class="mdui-icon material-icons">inbox</i>
+        <label>聊天</label>
+    </a>
+    <a onclick="wode()" class="mdui-ripple" id="wodeTab">
+        <i class="mdui-icon material-icons">insert_emoticon</i>
+        <label>我的</label>
+    </a>
+</div>
+<script>
+    if(localStorage.getItem("loginUser")===null) {
+        $('#xf-frame').load('login.html')
+        $('#xf-frame').show(0);
+    }
+
+    var inst = new mdui.Menu('#add-button', '#menu');
+
+    // method
+    document.getElementById('add-button').addEventListener('click', function () {
+        inst.open();
+    });
+
+    // event
+    var dialog = document.getElementById('menu');
+
+    dialog.addEventListener('open.mdui.menu', function () {
+        console.log('open');
+    });
+
+    dialog.addEventListener('opened.mdui.menu', function () {
+        console.log('opened');
+    });
+
+    dialog.addEventListener('close.mdui.menu', function () {
+        console.log('close');
+    });
+
+    dialog.addEventListener('closed.mdui.menu', function () {
+        console.log('closed');
+    });
+
+    if (localStorage.getItem("lastPage") != null) {
+        $("#" + localStorage.getItem("lastPage") + "Tab").click();
+        $("#" + localStorage.getItem("lastPage") + "Tab").addClass('mdui-bottom-nav-active')
+    } else zixun()
+</script>
 </body>
 
 </html>
