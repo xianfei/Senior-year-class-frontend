@@ -47,26 +47,27 @@
 
         function addTenCard() {
             isLoading = true;
-            $.ajax({
-                type: 'POST',
-                timeout: 5000,
-                url: ajaxurl, data: {begin: num, end: num + 19, time: loadtime}, success: function (result) {
-                    console.log(result)
-                    document.getElementById('loadmore').remove();
-                    for (var res of result) {
-                        var media
-                        if (res.attachmentType == 3) media = String.raw`
+            try {
+                $.ajax({
+                    type: 'POST',
+                    timeout: 5000,
+                    url: ajaxurl, data: {begin: num, end: num + 19, time: loadtime}, success: function (result) {
+                        console.log(result)
+                        document.getElementById('loadmore').remove();
+                        for (var res of result) {
+                            var media
+                            if (res.attachmentType == 3) media = String.raw`
                          <div class="mdui-card-media test_img">
                             <img src="${res.img}"/>
                    </div>
                          `
-                        else
-                            media = String.raw`
+                            else
+                                media = String.raw`
                          <iframe class="test_iframe" src="${res.attachment}">
 
                    </iframe>
                          `
-                        $('#test').append(String.raw`
+                            $('#test').append(String.raw`
                 <div style="margin: 0px -15px 10px -15px" class="mdui-card mdui-shadow-3" onclick="currentMoment = this.innerHTML;clickShow('detail.html');currentID = ${res.momentID}">
                  <div class="mdui-card-header">
     <img class="mdui-card-header-avatar" src="avatar.jpg"/>
@@ -81,36 +82,50 @@
 
 
                 </div>`)
-                        num++;
+                            num++;
+                        }
+                        $('#test').append('<div id="loadmore" style="text-align: center;"><div class="mdui-spinner mdui-spinner-colorful"></div><div style="padding-top:3px">正在加载更多内容</div></div>');
+                        mdui.mutation()
+                        setInterval(function () {
+                            isLoading = false;
+                        }, 2000)
+                    }, error: function (jqXHR, exception) {
+                        document.getElementById('loadmore').remove();
+                        var msg = '';
+                        if (exception === 'timeout') {
+                            msg = '连接超时.';
+                        } else if (jqXHR.status === 0) {
+                            msg = '无法连接到服务器.\n';
+                        } else if (jqXHR.status == 404) {
+                            msg = 'Requested page not found. [404]';
+                        } else if (jqXHR.status == 500) {
+                            msg = 'Internal Server Error [500].';
+                        } else if (exception === 'parsererror') {
+                            msg = 'Requested JSON parse failed.';
+                        } else if (exception === 'timeout') {
+                            msg = '连接超时.';
+                        } else if (exception === 'abort') {
+                            msg = 'Ajax request aborted.';
+                        } else {
+                            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                        }
+                        $('#test').append(String.raw`<div id="errorInfo" style="border-radius: 20px;margin: 30px 35px 10px 35px;overflow: visible;height: 100px" class="mdui-card mdui-shadow-3">
+                <img src="crying-cat.png" style="width: 80px;height: 80px;margin-left: -30px;margin-top: -35px">
+                <span style="color: #ffb739;font-size: 20px;font-weight: 600;top: -15px;position: relative;">错误</span>
+                <br><span style="margin-left: 30px;margin-right: 10px">${msg}</span>
+
+            </div>`);
                     }
-                    $('#test').append('<div id="loadmore" style="text-align: center;"><div class="mdui-spinner mdui-spinner-colorful"></div><div style="padding-top:3px">正在加载更多内容</div></div>');
-                    mdui.mutation()
-                    setInterval(function () {
-                        isLoading = false;
-                    }, 2000)
-                }, error: function (jqXHR, exception) {
-                    document.getElementById('loadmore').remove();
-                    var msg = '';
-                    if (exception === 'timeout') {
-                        msg = '连接超时.';
-                    } else if (jqXHR.status === 0) {
-                        msg = '无法连接到服务器.\n' + exception + '\n' + ajaxurl;
-                    } else if (jqXHR.status == 404) {
-                        msg = 'Requested page not found. [404]';
-                    } else if (jqXHR.status == 500) {
-                        msg = 'Internal Server Error [500].';
-                    } else if (exception === 'parsererror') {
-                        msg = 'Requested JSON parse failed.';
-                    } else if (exception === 'timeout') {
-                        msg = '连接超时.';
-                    } else if (exception === 'abort') {
-                        msg = 'Ajax request aborted.';
-                    } else {
-                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
-                    }
-                    $('#test').append("服务器连接失败：" + msg);
-                }
-            });
+                });
+            }catch (e) {
+                document.getElementById('loadmore').remove();
+                $('#test').append(String.raw`<div id="errorInfo" style="border-radius: 20px;margin: 30px 35px 10px 35px;overflow: visible;height: 100px" class="mdui-card mdui-shadow-3">
+                <img src="crying-cat.png" style="width: 80px;height: 80px;margin-left: -30px;margin-top: -35px">
+                <span style="color: #ffb739;font-size: 20px;font-weight: 600;top: -15px;position: relative;">错误</span>
+                <br><span style="margin-left: 30px;margin-right: 10px">${e}</span>
+
+            </div>`);
+            }
 
 
         }
