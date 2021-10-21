@@ -1,45 +1,69 @@
-var ajaxurl = 'http://' + (location.search.substr(1) === '' ? '127.0.0.1:8808' : decodeURIComponent(location.search.substr(1))) + '/getnews';
+var ajaxurl = 'http://' + (location.search.substr(1) === '' ? 'xianfei.ml:8808' : decodeURIComponent(location.search.substr(1))) + '/getnews';
 
+var zixuntab = '';
+
+var lastPage = "zixun"
+
+var sTop = 0;
 function zixun() {
+        $('body').css('background', '#fff')
+
     $('#xf-tab').remove()
-    $('#contents').load('zixun.html', function () {
+    $('#contents').hide()
+    if(lastPage=="zixun"||zixuntab=='')$('#contents-main').load('zixun.html', function () {
         $('#mytab').append($('#xf-tab'));
+        zixuntab = $('#xf-tab')
     });
+    else {
+        $('#mytab').append(zixuntab);
+    }
+    $('#contents-main').show()
     $('#app-title').text('')
     $('#tabbar').removeClass("xfshadow")
     $('#tabbar').removeClass("mdui-shadow-0")
     $('#tabbar').addClass("xfshadow")
-    $('body').css('background', '#fafafa')
     localStorage.setItem("lastPage", "zixun")
-
+    lastPage  = "zixun"
+    document.documentElement.scrollTop = sTop
+    $('#add-button').show()
 }
 
 function wode() {
+        $('body').css('background', '#fff')
+
+    if(lastPage =="zixun") sTop = document.documentElement.scrollTop || document.body.scrollTop
+    lastPage = "wode"
     $('#xf-tab').remove()
     $('#app-title').text('')
+    $('#contents-main').hide()
     $('#contents').load('my.html', function () {
+        $('#contents').show()
         $('#mytab').append($('#xf-tab'));
     });
-    $('body').css('background', '#fff')
     $('#tabbar').removeClass("xfshadow")
     $('#tabbar').removeClass("mdui-shadow-0")
     $('#tabbar').addClass("mdui-shadow-0")
     localStorage.setItem("lastPage", "wode")
-
-
+    $('#add-button').hide()
 }
 
 function xiaoxi() {
+        $('body').css('background', '#fff')
+
+        if(lastPage=="zixun") sTop = document.documentElement.scrollTop || document.body.scrollTop
     $('#xf-tab').remove()
+    $('#contents-main').hide()
     $('#contents').load('xiaoxi.html', function () {
+        $('#contents').show()
         $('#mytab').append($('#xf-tab'));
     });
     $('#app-title').text('私聊')
-    $('body').css('background', '#fff')
     $('#tabbar').removeClass("xfshadow")
     $('#tabbar').removeClass("mdui-shadow-0")
     $('#tabbar').addClass("mdui-shadow-0")
     localStorage.setItem("lastPage", "xiaoxi")
+    lastPage = "xiaoxi"
+    $('#add-button').hide()
 }
 
 var isInAndroid = false;
@@ -58,6 +82,7 @@ var mydialog;
 window.onload = () => {
     mydialog = new mdui.Dialog('#popup');
     $('#popup')[0].addEventListener('opened.mdui.dialog', function () {
+            // window.history.pushState({ isReload: false }, '', window.location.href)
         if (isInAndroid) {
             window.open("xianfei://darkTitleBar");
         }
@@ -68,18 +93,39 @@ window.onload = () => {
         }
     });
 
+    window.addEventListener("popstate", function (e) {
+        if (mydialog.getState() == "closed")backCallback()
+    },false)
+
 }
 
 function clickShow(href) {
     $('#popup').html('<br>');
-    mydialog.open();
     $('#popup').load(href)
+    mydialog.open();
 }
 
 function backCallback() {
-    if (mydialog.getState() === "closed") return 'exit';
-    else mydialog.close();
-    return '';
+    if (mydialog.getState() !== "closed") {
+        mydialog.close();
+        return ''
+    }else if(xfFrameCanGoBack){
+        $('#xf-frame').fadeOut(200)
+        document.documentElement.scrollTop = sTop
+        xfFrameCanGoBack = false;
+        return ''
+    }
+    return 'exit';
+}
+
+function clickShowFull(href) {
+    $('#xf-frame').html('<br>');
+    $('#xf-frame').load(href)
+    $('#xf-frame').fadeIn(200)
+    xfFrameCanGoBack = true;
+    window.history.pushState({ isReload: false }, '', window.location.href)
+    window.history.replaceState({ isReload: false }, '', '#detail')
+    if(lastPage =="zixun") sTop = document.documentElement.scrollTop || document.body.scrollTop
 }
 
 Date.prototype.format = function (fmt) {
@@ -104,7 +150,7 @@ Date.prototype.format = function (fmt) {
 }
 
 function checkWord(str){
-    var e = str.match(/(习近平|傻逼|操你\S|日你\S|草你\S|狗逼|六四事件|八九六四|共产党)/g)
+    var e = str.match(/(傻逼|操你\S|日你\S|草你\S|狗逼|六四事件|八九六四)/g)
     if(e){
         mdui.snackbar({
                         message: "包含敏感词："+JSON.stringify(e)

@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="mdui/css/mdui.css" />
+    <link rel="stylesheet" href="mdui/css/mdui.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
         #touxiang {
             position: relative;
-            margin-top: 10px;
+            object-fit: cover;
+            margin-top: 20px;
             margin-left: 40px;
             height: 80px;
             width: 80px;
@@ -28,159 +29,261 @@
 
         #username {
             position: absolute;
-            margin-top: 0px;
+            margin-top: -2px;
             margin-left: 0px;
             font-size: 25px;
             font-weight: bold;
             color: #666;
         }
 
-         #userdesc {
-            position: absolute;
-            margin-top: 30px;
+
+        #userxxxx{
+           position: absolute;
+            margin-top: 33px;
             margin-left: 0px;
             font-size: 14px;
             color: #666;
         }
 
-         .pass2 {
-                width: 72%;
-                color: rgb(38, 50, 56);
-                font-weight: 700;
-                font-size: 14px;
-                letter-spacing: 1px;
-                background: rgba(136, 126, 126, 0.04);
-                padding: 10px 20px;
-                border-radius: 20px;
-                outline: none;
-                box-sizing: border-box;
-                border: 2px solid rgba(0, 0, 0, 0.02);
-                margin-left: 6px;
-                margin-bottom: 27px;
-            }
+        .pass2 {
+            width: 72%;
+            color: rgb(38, 50, 56);
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 1px;
+            background: rgba(136, 126, 126, 0.04);
+            padding: 10px 20px;
+            border-radius: 20px;
+            outline: none;
+            box-sizing: border-box;
+            border: 2px solid rgba(0, 0, 0, 0.02);
+            margin-left: 6px;
+            margin-bottom: 27px;
+        }
 
 
+        .pass2:focus {
+            border: 2px solid rgba(0, 0, 0, 0.18) !important;
 
-            .pass2:focus {
-                border: 2px solid rgba(0, 0, 0, 0.18) !important;
+        }
 
-            }
-
-            .hint-type{
-        color: rgb(38, 50, 56);
-                font-weight: 700;
-                            margin-left: 10px;
+        .hint-type {
+            color: rgb(38, 50, 56);
+            font-weight: 700;
+            margin-left: 10px;
             width: 20%;
             display: inline-block;
         }
 
+        .card33333 {
+            position: fixed;
+            left: 100px;
+            top: 100px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            border-radius: 5px;
+            width: 200px;
+            background: #eeec;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+        }
+
+        .carditem {
+            font-weight: bold;
+            color: #666;
+            margin: 5px;
+            height: 40px;
+            border-radius: 5px;
+            background: #fffa;
+            line-height: 40px;
+        }
+
+        .cardicon {
+            margin-left: 5px;
+            margin-right: 10px;
+        }
 
 
     </style>
-        <link rel="stylesheet" href="mycss.css"/>
+    <link rel="stylesheet" href="mycss.css"/>
 
-            <script src="jquery.js"></script>
-        <script src="myapp.js"></script>
+    <script src="jquery.js"></script>
 </head>
 
 <body>
-    <img id="touxiang" class="mdui-shadow-4" src="avatar.jpg">
-    <div class="userinfo">
-        <span id="username">衔飞飞飞飞</span>
-        <span id="userdesc">衔飞飞飞飞</span>
+<div id="rightclick"
+     style="display:none;position: fixed;top: 0;right: 0;height: 100%;width: 100%;background: #fff0;z-index: 999;"
+     onclick='$("#rightclick").hide()'>
+    <div id="rightmenu" class="card33333">
+        <div class="carditem"  onclick="changeUserInfo()"><i class="mdui-icon material-icons cardicon">edit</i>修改个人信息</div>
+        <div class="carditem"  onclick="clickShow('uploadavatar.html')"><i class="mdui-icon material-icons cardicon">account_circle</i>更换头像
+        </div>
+        <div class="carditem" onclick="getUsersList('getFollowers')"><i class="mdui-icon material-icons cardicon">people</i>查看关注</div>
+        <div class="carditem" onclick="getUsersList('getFans')"><i class="mdui-icon material-icons cardicon">person</i>查看粉丝</div>
+        <div style="line-height: 12px;text-align: right;font-size: 12px;margin-right: 10px;margin-top:5px;color:#777">
+            奶黄喵APP
+        </div>
+        <div style="text-align: right;font-size: 8px;margin-right: 10px;color:#777">beta 2021.11</div>
     </div>
-    <ul class="mdui-list" style="padding-top: 80px;padding-left: 30px;padding-right: 30px;">
-        <li class="mdui-list-item mdui-ripple" onclick="getUsersList('getFans')">
-            <i class="mdui-list-item-icon mdui-icon material-icons">people</i>
-            <div class="mdui-list-item-content">您的粉丝数：<span id="follower">unknown</span></div>
-        </li>
-        <li class="mdui-list-item mdui-ripple" onclick="getUsersList('getFollowers')">
-            <i class="mdui-list-item-icon mdui-icon material-icons">person</i>
-            <div class="mdui-list-item-content">已关注人数：<span id="following">unknown</span></div>
-        </li>
-        <li class="mdui-list-item mdui-ripple">
-            <i class="mdui-list-item-icon mdui-icon material-icons">search</i>
-            <div class="mdui-list-item-content">查找用户</div>
-        </li>
-        <li class="mdui-list-item mdui-ripple">
-            <i class="mdui-list-item-icon mdui-icon material-icons">home</i>
-            <div class="mdui-list-item-content">个人主页</div>
-        </li>
-        <li class="mdui-list-item mdui-ripple" onclick="changeUserInfo()">
-            <i class="mdui-list-item-icon mdui-icon material-icons">edit</i>
-            <div class="mdui-list-item-content">修改个人信息</div>
-        </li>
-
-        <li class="mdui-list-item mdui-ripple">
-            <i class="mdui-list-item-icon mdui-icon material-icons">settings</i>
-            <div class="mdui-list-item-content">设置</div>
-        </li>
-        <li class="mdui-list-item mdui-ripple">
-            <i class="mdui-list-item-icon mdui-icon material-icons">build</i>
-            <div class="mdui-list-item-content">开发者工具</div>
-        </li>
-        <li class="mdui-list-item mdui-ripple" onclick="clickShow('about.html')">
-            <i class="mdui-list-item-icon mdui-icon material-icons">info</i>
-            <div class="mdui-list-item-content">关于</div>
-        </li>
-        <li class="mdui-list-item mdui-ripple" onclick="setTimeout(()=>{localStorage.removeItem('loginUser');window.location.reload()},100)">
-            <i class="mdui-list-item-icon mdui-icon material-icons">exit_to_app</i>
-            <div class="mdui-list-item-content">退出登录</div>
-        </li>
-        <li class="mdui-list-item mdui-ripple" onclick="window.open('uploadimg/index.html')">
-            <i class="mdui-list-item-icon mdui-icon material-icons">info</i>
-            <div class="mdui-list-item-content">测试上传图片</div>
-        </li>
-
-    </ul>
+</div>
+<img id="touxiang" class="mdui-shadow-4" src="avatar.jpg">
+<div class="userinfo" id="userinfo">
+    <span id="username">Unknown</span>
+    <span id="userxxxx">粉丝数： 关注数：</span>
+</div>
+<ul class="mdui-list" style="padding-top: 100px;padding-left: 30px;padding-right: 30px;">
+    <li class="mdui-list-item mdui-ripple" onclick="searchUser()">
+        <i class="mdui-list-item-icon mdui-icon material-icons">search</i>
+        <div class="mdui-list-item-content">查找用户</div>
+    </li>
+    <li class="mdui-list-item mdui-ripple">
+        <i class="mdui-list-item-icon mdui-icon material-icons">home</i>
+        <div class="mdui-list-item-content">个人主页</div>
+    </li>
+    <li class="mdui-list-item mdui-ripple">
+        <i class="mdui-list-item-icon mdui-icon material-icons">settings</i>
+        <div class="mdui-list-item-content">设置</div>
+    </li>
+    <li class="mdui-list-item mdui-ripple">
+        <i class="mdui-list-item-icon mdui-icon material-icons">build</i>
+        <div class="mdui-list-item-content">开发者工具</div>
+    </li>
+    <li class="mdui-list-item mdui-ripple" onclick="clickShow('about.html')">
+        <i class="mdui-list-item-icon mdui-icon material-icons">info</i>
+        <div class="mdui-list-item-content">关于</div>
+    </li>
+    <li class="mdui-list-item mdui-ripple"
+        onclick="setTimeout(()=>{mdui.confirm('您确定要退出登录吗？','确认退出',()=>{localStorage.removeItem('loginUser');localStorage.removeItem('lastPage');setTimeout(()=>{window.location.reload()},100);},)},100)">
+        <i class="mdui-list-item-icon mdui-icon material-icons">exit_to_app</i>
+        <div class="mdui-list-item-content">退出登录</div>
+    </li>
 
 
-<div id="user-list-frame" style="top:0;left:0;width: 100%;height: 100%;z-index: 1000;position: fixed;background: white;display: none;overflow: scroll;padding-top: var(--top-bar-height)">
+</ul>
+
+
+<div id="user-list-frame"
+     style="top:0;left:0;width: 100%;height: 100%;z-index: 1000;position: fixed;background: white;display: none;overflow: scroll;padding-top: var(--top-bar-height)">
     <div id="user-list" style="margin: 10px"></div>
 </div>
 
 </body>
 <script>
-    function changeUserInfo(){
+
+    function searchUser() {
+        var str = prompt("查找用户##请输入用户名")
+        if (str) {
+            $.post("http://39.106.25.203:1480/user/searchUser", {
+                userId: userInfo.userId,
+                queryUserName: str
+            }, function (result) {
+                var html = '';
+                for (const p of result.result.message) {
+                    console.log(p)
+                    html += String.raw`<li class="mdui-list-item mdui-ripple">
+          <div class="mdui-list-item-avatar"><img src="${p.userAvatar ? p.userAvatar : "cat1.png"}"/></div>
+          <div class="mdui-list-item-content">${p.userName}</div>
+        </li>
+                `
+                }
+                $('#popup').html(html === '' ? '<center style="margin-top: 20px">暂无用户</center>' : html);
+                mydialog.open();
+            });
+        }
+    }
+
+    function changeUserInfo() {
         $('#popup').html(String.raw`<br>
 <span class="hint-type">昵称：</span><input class="pass2" id="new-name" type="text" value="${userInfo.userName}"><br>
-<span class="hint-type">个性签名：</span><input class="pass2" id="new-desc" type="text" value="${!userInfo.description?'':userInfo.description}"><br>
+<span class="hint-type">个性签名：</span><input class="pass2" id="new-desc" type="text" value="${!userInfo.description ? '' : userInfo.description}"><br>
 <span class="hint-type">原密码：</span><input class="pass2" id="old-pwd" type="password" placeholder="如不修改密码请留空"><br>
 <span class="hint-type">新密码：</span><input class="pass2" id="new-pwd" type="password" placeholder="如不修改密码请留空"><br>
-<button class="mdui-btn mdui-color-orange-accent mdui-ripple" style="border-radius: 18px;margin-left: 80px;width: 200px;color: #fff !important">提交</button>
+<button class="mdui-btn mdui-color-orange-accent mdui-ripple" onclick="changeUserInfo2()" style="border-radius: 18px;margin-left: 80px;width: 200px;color: #fff !important">提交</button>
 `);
-                            mydialog.open();
+        mydialog.open();
 
     }
 
+    function changeUserInfo2() {
+        $.post("http://39.106.25.203:1480/user/changeUsersInfo", {
+            userId: userInfo.userId,
+            userName: $('#new-name').val(),
+            isMale: userInfo.isMale,
+            description: $('#new-desc').val(),
+        }, function (result) {
+            if (result.result.status) {
+                mdui.snackbar({
+                    message: "修改成功！"
+                });
+                $.post("http://39.106.25.203:1480/user/getUsersInfo", {
+                    userId: userInfo.userId,
+                    targetUserId: userInfo.userId
+                }, function (result2) {
+                    localStorage.setItem("loginUserInfo", JSON.stringify(result2.result.message))
+                    userInfo = result2.result.message;
+                    updateUserInfo(userInfo)
 
-    function updateUserInfo(userInfo){
+                });
+                mydialog.close();
+            } else {
+                mdui.snackbar({
+                    message: result.result.message
+                });
+            }
+        });
+
+        if ($('#new-name').val() !== "") {
+
+        }
+    }
+
+
+    function updateUserInfo(userInfo) {
         $('#username').html(userInfo.userName);
-        $('#userdesc').html(!userInfo.description?'该用户暂未填写个性签名':userInfo.description);
-        $('#touxiang')[0].src = userInfo.userAvatar?userInfo.userAvatar:"cat1.png"
-        $('#follower').text(userInfo.follower);
-        $('#following').text(userInfo.following);
+        // $('#userdesc').html(!userInfo.description ? '该用户暂未填写个性签名' : userInfo.description);
+        $('#touxiang')[0].src = userInfo.userAvatar ? userInfo.userAvatar : "cat1.png"
+        $('#userxxxx').text("粉丝数："+userInfo.follower+" 关注数："+userInfo.following);
     }
+
     var userInfo = JSON.parse(localStorage.getItem("loginUserInfo"));
     updateUserInfo(userInfo)
 
-    function getUsersList(opt){
-        $.post("http://39.106.25.203:1480/user/"+opt,{userId:userInfo.userId,targetUserId:userInfo.userId},function(result){
+    function getUsersList(opt) {
+        $.post("http://39.106.25.203:1480/user/" + opt, {
+            userId: userInfo.userId,
+            targetUserId: userInfo.userId
+        }, function (result) {
             var html = '';
             for (const p of result.result.message) {
                 console.log(p)
-                html+= String.raw`<li class="mdui-list-item mdui-ripple">
-          <div class="mdui-list-item-avatar"><img src="${p.userAvatar?p.userAvatar:"cat1.png"}"/></div>
+                html += String.raw`<li class="mdui-list-item mdui-ripple">
+          <div class="mdui-list-item-avatar"><img src="${p.userAvatar ? p.userAvatar : "cat1.png"}"/></div>
           <div class="mdui-list-item-content">${p.userName}</div>
         </li>
                 `
             }
-            $('#popup').html(html===''?'<center style="margin-top: 20px">暂无用户</center>':html);
-                    mydialog.open();
+            $('#popup').html(html === '' ? '<center style="margin-top: 20px">暂无用户</center>' : html);
+            mydialog.open();
 
-    });
+        });
 
     }
+
+    function xfright(e) {
+        if(e)e.preventDefault() // 阻止右键菜单默认行为
+        $("#rightclick").show()
+        $('#rightmenu').css('top', '' + e.clientY + 'px')
+        $('#rightmenu').css('left', '' + e.clientX + 'px')
+
+
+        console.log(e)
+    }
+
+
+    $("#touxiang").contextmenu(xfright)
+    $('#userinfo').contextmenu(xfright)
+    $("#touxiang").click(()=>{xfright()})
+    $('#userinfo').click(()=>{xfright()})
+
 </script>
 
 </html>

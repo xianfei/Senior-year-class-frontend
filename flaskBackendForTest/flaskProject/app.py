@@ -1,7 +1,15 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
+
 import random
 
 app = Flask(__name__)
+CORS(app, resources=r'/*')
+
+devlog = "奶黄喵App OCT 19 Dev Beta<br><br>当前版本动态为随机生成<br><br>" \
+         "新特性：<br>图片上传采用Webp压缩方案，不修改分辨率<br><br>" \
+         "TODO：<br>后端动态接口对接<br>优化图片展示<br>点赞评论<br>用户首页及关注等功能<br>聊天<br>整合CLI Shell及C语言运行时<br><br>" \
+         "BUGs：<br>暂无"
 
 strs = ['玲珑骰子安红豆，入骨相思知不知？————温廷筠《杨柳枝》',
         '生当复来归，死当长相思。——苏武《结发为夫妻》',
@@ -81,8 +89,17 @@ def hello_world():
     for i in range(begin, end + 1):
         text = random.choice(strs)
         img = "http://127.0.0.1:8808/static/imgs/" + str(random.randint(1, 74)) + '.jpg'
-        items.append({'momentID':123+i,'index': i, 'text': text if i%5!=2 else '这是一条卡片交互程序测试动态', 'img': img, 'title': '我是第' + str(i) + '条消息',
-                      'href': 'http://127.0.0.1:8808/static/test/appdetail.html', 'liked': random.randint(0, 5),
+        if i ==0:
+                items.append(
+                        {'momentID': 123 + i, 'index': i, 'text': devlog,
+                         "userName": "奶黄喵 Official", "userAvatar": "nhm-dev.jpg", "userId": "16888",
+                         'liked': 666,'comment': 666, 'time': (time - i * 21987),
+                         'attachmentType': 0},
+                        )
+        else:
+                items.append({'momentID':123+i,'index': i, 'text': text if i%5!=2 else '这是一条卡片交互程序测试动态', 'img': img,
+                      "userName": "衔飞飞飞飞", "userAvatar": "avatar.jpg","userId":"16888",
+                      'liked': random.randint(0, 5),
                       'comment': random.randint(0, 5), 'time': (time-i*21987),'attachmentType':(1 if i%5==2 else 3),
                       "attachment":"http://127.0.0.1:8808/static/2048/index.html"},
                      )

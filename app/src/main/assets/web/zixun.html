@@ -68,20 +68,22 @@
                    </iframe>
                          `
                             $('#test').append(String.raw`
-                <div style="margin: 0px -15px 10px -15px" class="mdui-card mdui-shadow-3" onclick="currentMoment = this.innerHTML;clickShow('detail.html');currentID = ${res.momentID}">
-                 <div class="mdui-card-header">
+                <div style="margin: 0px -5px 0px -5px;" class="" onclick="currentMoment = this.innerHTML;currentID = ${res.momentID};clickShowFull('detail.html');">
+                 <div class="mdui-card-header" style="padding: 16px 5px 10px;">
     <img class="mdui-card-header-avatar" src="avatar.jpg"/>
     <div class="mdui-card-header-title">衔飞飞飞飞</div>
     <div class="mdui-card-header-subtitle">
     ${new Date(res.time).format("yyyy-MM-dd hh:mm:ss")}</div>
   </div>
-                  <div class="mdui-card-primary-title" style="margin-left: 10px;font-size: 18px;line-height: 26px;">${res.title}！${res.text}</div>
+                  <div class="mdui-card-primary-title" style="margin-left: 5px;font-size: 18px;line-height: 26px;">${res.title}！${res.text}</div>
  ${media}<div class="mdui-card-header-subtitle" style="text-align: end;padding:5px 0 10px 0">
-<div><i class="mdui-icon material-icons">favorite_border</i> ${res.liked} &nbsp;&nbsp;
-<i class="mdui-icon material-icons">chat_bubble_outline</i> ${res.comment}  &nbsp;&nbsp;&nbsp;&nbsp;</div>
+<div><span onclick="var ev = window.event || arguments.callee.caller.arguments[0];if (window.event) ev.cancelBubble = true;
+else { ev.stopPropagation();} this.innerHTML = this.innerHTML.replace(/(\d+)/g,parseInt(this.innerHTML.replace(/(\D*)(\d+)/g,'$2'))+1).replace('material-icons','material-icons mdui-icon-red')"><i class="mdui-icon material-icons">favorite_border</i> ${res.liked} &nbsp;&nbsp;
+</span><span onclick="var ev = window.event || arguments.callee.caller.arguments[0];if (window.event) ev.cancelBubble = true;
+else { ev.stopPropagation();}prompt('评论##请输入评论内容')"><i class="mdui-icon material-icons">chat_bubble_outline</i> ${res.comment} </span> &nbsp;&nbsp;&nbsp;&nbsp;</div>
 
 
-                </div>`)
+                </div><div style="width: 95%;height: 1px;background: #eee;margin: auto;"></div>`)
                             num++;
                         }
                         $('#test').append('<div id="loadmore" style="text-align: center;"><div class="mdui-spinner mdui-spinner-colorful"></div><div style="padding-top:3px">正在加载更多内容</div></div>');

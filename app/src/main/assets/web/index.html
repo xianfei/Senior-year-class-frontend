@@ -14,7 +14,7 @@
 </head>
 
 <body class="mdui-bottom-nav-fixed mdui-theme-primary-orange">
-<div id="tabbar" class="mdui-appbar mdui-appbar-fixed glass mdui-shadow-0">
+<div id="tabbar" class="mdui-appbar mdui-appbar-fixed glass mdui-shadow-0 tab-bar">
     <div id="statpadding" style="height: 0px;"></div>
     <div class="mdui-toolbar">
         <a href="javascript:;" class="mdui-typo-title" id="app-title">My Application</a>
@@ -24,7 +24,7 @@
                     <a href="javascript:;" class="mdui-ripple">发送文字</a>
                 </li>
                 <li class="mdui-menu-item">
-                    <a href="javascript:window.open('uploadimg/index.html');" class="mdui-ripple">发送图片及文字</a>
+                    <a href="javascript:;" class="mdui-ripple">发送图片及文字</a>
                 </li>
                 <li class="mdui-menu-item">
                     <a href="javascript:;" class="mdui-ripple">发送视频及文字</a>
@@ -47,12 +47,17 @@
 
 <div id="xf-frame" style="width: 100%;height: 100%;z-index: 1000;position: fixed;background: white;display: none;overflow: scroll;"></div>
 
-<div id="contents" style="padding-top: 56px;margin: auto;max-width: 450px;">
+<div id="contents" style="padding-top: 56px;margin: auto;max-width: 450px;display: none;">
     <!--padding-top: 56+20 -->
 
 </div>
 
-<div class="mdui-dialog mdui-shadow-4" id="popup"
+<div id="contents-main" style="padding-top: 56px;margin: auto;max-width: 450px;">
+    <!--padding-top: 56+20 -->
+
+</div>
+
+<div class="app-overflow-window mdui-shadow-4" id="popup"
      style="left: 0;right: 0;top: 0;bottom: 0;margin: auto;box-sizing: border-box;overflow: scroll;border-radius: 15px;padding:2px;width: 95%;max-width: 450px;">
 
 </div>
@@ -72,6 +77,8 @@
     </a>
 </div>
 <script>
+    var xfFrameCanGoBack = false;
+
     if(localStorage.getItem("loginUser")===null) {
         $('#xf-frame').load('login.html')
         $('#xf-frame').show(0);

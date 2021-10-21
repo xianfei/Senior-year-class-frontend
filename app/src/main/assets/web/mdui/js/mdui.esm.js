@@ -4397,7 +4397,7 @@ class Dialog {
         }
         extend(this.options, options);
         // 绑定取消按钮事件
-        this.$element.find('[mdui-dialog-cancel]').each((_, cancel) => {
+        this.$element.find('[app-overflow-window-cancel]').each((_, cancel) => {
             $(cancel).on('click', () => {
                 this.triggerEvent('cancel');
                 if (this.options.closeOnCancel) {
@@ -4406,7 +4406,7 @@ class Dialog {
             });
         });
         // 绑定确认按钮事件
-        this.$element.find('[mdui-dialog-confirm]').each((_, confirm) => {
+        this.$element.find('[app-overflow-window-confirm]').each((_, confirm) => {
             $(confirm).on('click', () => {
                 this.triggerEvent('confirm');
                 if (this.options.closeOnConfirm) {
@@ -4415,7 +4415,7 @@ class Dialog {
             });
         });
         // 绑定关闭按钮事件
-        this.$element.find('[mdui-dialog-close]').each((_, close) => {
+        this.$element.find('[app-overflow-window-close]').each((_, close) => {
             $(close).on('click', () => this.close());
         });
     }
@@ -4434,9 +4434,9 @@ class Dialog {
             return;
         }
         const $element = currentInst.$element;
-        const $title = $element.children('.mdui-dialog-title');
-        const $content = $element.children('.mdui-dialog-content');
-        const $actions = $element.children('.mdui-dialog-actions');
+        const $title = $element.children('.app-overflow-window-title');
+        const $content = $element.children('.app-overflow-window-content');
+        const $actions = $element.children('.app-overflow-window-actions');
         // 调整 dialog 的 top 和 height 值
         $element.height('');
         $content.height('');
@@ -4445,7 +4445,7 @@ class Dialog {
             top: `${($window.height() - elementHeight) / 2}px`,
             height: `${elementHeight}px`,
         });
-        // 调整 mdui-dialog-content 的高度
+        // 调整 app-overflow-window-content 的高度
         $content.innerHeight(elementHeight -
             ($title.innerHeight() || 0) -
             ($actions.innerHeight() || 0));
@@ -4454,7 +4454,7 @@ class Dialog {
      * hashchange 事件触发时关闭对话框
      */
     hashchangeEvent() {
-        if (window.location.hash.substring(1).indexOf('mdui-dialog') < 0) {
+        if (window.location.hash.substring(1).indexOf('app-overflow-window') < 0) {
             currentInst.close(true);
         }
     }
@@ -4472,7 +4472,7 @@ class Dialog {
      * 动画结束回调
      */
     transitionEnd() {
-        if (this.$element.hasClass('mdui-dialog-open')) {
+        if (this.$element.hasClass('app-overflow-window-open')) {
             this.state = 'opened';
             this.triggerEvent('opened');
         }
@@ -4507,7 +4507,7 @@ class Dialog {
         this.state = 'opening';
         this.triggerEvent('open');
         this.$element
-            .addClass('mdui-dialog-open')
+            .addClass('app-overflow-window-open')
             .transitionEnd(() => this.transitionEnd());
         // 不存在遮罩层元素时，添加遮罩层
         if (!$overlay) {
@@ -4523,18 +4523,18 @@ class Dialog {
         // 是否显示遮罩层，不显示时，把遮罩层背景透明
         $overlay.css('opacity', this.options.overlay ? '' : 0);
         if (this.options.history) {
-            // 如果 hash 中原来就有 mdui-dialog，先删除，避免后退历史纪录后仍然有 mdui-dialog 导致无法关闭
-            // 包括 mdui-dialog 和 &mdui-dialog 和 ?mdui-dialog
+            // 如果 hash 中原来就有 app-overflow-window，先删除，避免后退历史纪录后仍然有 app-overflow-window 导致无法关闭
+            // 包括 app-overflow-window 和 &app-overflow-window 和 ?app-overflow-window
             let hash = window.location.hash.substring(1);
-            if (hash.indexOf('mdui-dialog') > -1) {
-                hash = hash.replace(/[&?]?mdui-dialog/g, '');
+            if (hash.indexOf('app-overflow-window') > -1) {
+                hash = hash.replace(/[&?]?app-overflow-window/g, '');
             }
             // 后退按钮关闭对话框
             if (hash) {
-                window.location.hash = `${hash}${hash.indexOf('?') > -1 ? '&' : '?'}mdui-dialog`;
+                window.location.hash = `${hash}${hash.indexOf('?') > -1 ? '&' : '?'}app-overflow-window`;
             }
             else {
-                window.location.hash = 'mdui-dialog';
+                window.location.hash = 'app-overflow-window';
             }
             $window.on('hashchange', this.hashchangeEvent);
         }
@@ -4585,7 +4585,7 @@ class Dialog {
                 $('.mdui-overlay').css('z-index', 2000);
             }
             this.$element
-                .removeClass('mdui-dialog-open')
+                .removeClass('app-overflow-window-open')
                 .transitionEnd(() => this.transitionEnd());
             if (this.options.history && !queue(queueName).length) {
                 if (!historyBack) {
@@ -4649,7 +4649,7 @@ $document.on('keydown', (event) => {
 });
 mdui.Dialog = Dialog;
 
-const customAttr$7 = 'mdui-dialog';
+const customAttr$7 = 'app-overflow-window';
 const dataName$1 = '_mdui_dialog';
 $(() => {
     $document.on('click', `[${customAttr$7}]`, function () {
@@ -4704,7 +4704,7 @@ mdui.dialog = function (options) {
     // 按钮的 HTML
     let buttonsHTML = '';
     if ((_a = options.buttons) === null || _a === void 0 ? void 0 : _a.length) {
-        buttonsHTML = `<div class="mdui-dialog-actions${options.stackedButtons ? ' mdui-dialog-actions-stacked' : ''}">`;
+        buttonsHTML = `<div class="app-overflow-window-actions${options.stackedButtons ? ' app-overflow-window-actions-stacked' : ''}">`;
         each(options.buttons, (_, button) => {
             buttonsHTML +=
                 '<a href="javascript:void(0)" ' +
@@ -4713,12 +4713,12 @@ mdui.dialog = function (options) {
         buttonsHTML += '</div>';
     }
     // Dialog 的 HTML
-    const HTML = `<div class="mdui-dialog ${options.cssClass}">` +
+    const HTML = `<div class="app-overflow-window ${options.cssClass}">` +
         (options.title
-            ? `<div class="mdui-dialog-title">${options.title}</div>`
+            ? `<div class="app-overflow-window-title">${options.title}</div>`
             : '') +
         (options.content
-            ? `<div class="mdui-dialog-content">${options.content}</div>`
+            ? `<div class="app-overflow-window-content">${options.content}</div>`
             : '') +
         buttonsHTML +
         '</div>';
@@ -4733,7 +4733,7 @@ mdui.dialog = function (options) {
     // 绑定按钮事件
     if ((_b = options.buttons) === null || _b === void 0 ? void 0 : _b.length) {
         instance.$element
-            .find('.mdui-dialog-actions .mdui-btn')
+            .find('.app-overflow-window-actions .mdui-btn')
             .each((index, button) => {
             $(button).on('click', () => {
                 options.buttons[index].onClick(instance);
@@ -4793,7 +4793,7 @@ mdui.alert = function (text, title, onConfirm, options) {
                 onClick: onConfirm,
             },
         ],
-        cssClass: 'mdui-dialog-alert',
+        cssClass: 'app-overflow-window-alert',
         history: options.history,
         modal: options.modal,
         closeOnEsc: options.closeOnEsc,
@@ -4845,7 +4845,7 @@ mdui.confirm = function (text, title, onConfirm, onCancel, options) {
                 onClick: onConfirm,
             },
         ],
-        cssClass: 'mdui-dialog-confirm',
+        cssClass: 'app-overflow-window-confirm',
         history: options.history,
         modal: options.modal,
         closeOnEsc: options.closeOnEsc,
@@ -4918,7 +4918,7 @@ mdui.prompt = function (label, title, onConfirm, onCancel, options) {
                 onClick: onConfirmClick,
             },
         ],
-        cssClass: 'mdui-dialog-prompt',
+        cssClass: 'app-overflow-window-prompt',
         history: options.history,
         modal: options.modal,
         closeOnEsc: options.closeOnEsc,

@@ -11560,6 +11560,7 @@ select.mdui-select[multiple] option:last-child {
   width: 100%;
   height: 100%;
   border-radius: 50%;
+  object-fit: cover;
 }
 /* 列表项内容 */
 .mdui-list-item-content {
@@ -11940,7 +11941,7 @@ body.mdui-loaded .mdui-drawer {
  * ************   Dialog 提示框   ************
  * =============================================================================
  */
-.mdui-dialog {
+.app-overflow-window {
   position: fixed;
   right: 0;
   left: 0;
@@ -11971,25 +11972,25 @@ body.mdui-loaded .mdui-drawer {
           box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12);
 }
 @media (min-width: 600px) {
-  .mdui-dialog {
+  .app-overflow-window {
     width: 85%;
     max-height: 85%;
   }
 }
 @media (min-width: 1024px) {
-  .mdui-dialog {
+  .app-overflow-window {
     width: 80%;
     max-height: 80%;
   }
 }
 /* 打开提示框 */
-.mdui-dialog-open {
+.app-overflow-window-open {
   -webkit-transform: scale(1);
           transform: scale(1);
   opacity: 1;
 }
 /* 提示框标题 */
-.mdui-dialog-title {
+.app-overflow-window-title {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   font-weight: 500;
@@ -11998,11 +11999,11 @@ body.mdui-loaded .mdui-drawer {
   text-align: left;
 }
 /* 标题固定在顶部 */
-.mdui-dialog > .mdui-dialog-title {
+.app-overflow-window > .app-overflow-window-title {
   padding: 24px 24px 20px 24px;
 }
 /* 提示框内容 */
-.mdui-dialog-content {
+.app-overflow-window-content {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   padding: 24px;
@@ -12013,37 +12014,37 @@ body.mdui-loaded .mdui-drawer {
   -webkit-overflow-scrolling: touch;
 }
 /* 标题随内容滚动 */
-.mdui-dialog-content > .mdui-dialog-title {
+.app-overflow-window-content > .app-overflow-window-title {
   padding-bottom: 20px;
 }
-.mdui-dialog-title + .mdui-dialog-content {
+.app-overflow-window-title + .app-overflow-window-content {
   padding-top: 0;
 }
 /* 提示框底部按钮 */
-.mdui-dialog-actions {
+.app-overflow-window-actions {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   padding: 8px;
   text-align: right;
 }
-.mdui-dialog-actions .mdui-btn {
+.app-overflow-window-actions .mdui-btn {
   min-width: 64px;
   margin-left: 8px;
   color: #E91E63;
 }
-.mdui-dialog-actions .mdui-btn:first-child {
+.app-overflow-window-actions .mdui-btn:first-child {
   margin-left: 0;
 }
 /* 底部按钮滚随内容动 */
-.mdui-dialog-content > .mdui-dialog-actions {
+.app-overflow-window-content > .app-overflow-window-actions {
   margin: 0 -24px -24px -24px;
   padding-top: 32px;
 }
 /* 使提示框底部按钮竖排 */
-.mdui-dialog-actions-stacked {
+.app-overflow-window-actions-stacked {
   padding: 8px 0 8px 0;
 }
-.mdui-dialog-actions-stacked .mdui-btn {
+.app-overflow-window-actions-stacked .mdui-btn {
   width: 100%;
   height: 48px;
   margin: 0;
@@ -12056,52 +12057,52 @@ body.mdui-loaded .mdui-drawer {
  * ************   Dialog 强调色   ************
  * =============================================================================
  */
-.mdui-theme-accent-amber .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-amber .app-overflow-window-actions .mdui-btn {
   color: #FFC107;
 }
-.mdui-theme-accent-blue .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-blue .app-overflow-window-actions .mdui-btn {
   color: #2196F3;
 }
-.mdui-theme-accent-cyan .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-cyan .app-overflow-window-actions .mdui-btn {
   color: #00BCD4;
 }
-.mdui-theme-accent-deep-orange .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-deep-orange .app-overflow-window-actions .mdui-btn {
   color: #FF5722;
 }
-.mdui-theme-accent-deep-purple .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-deep-purple .app-overflow-window-actions .mdui-btn {
   color: #673AB7;
 }
-.mdui-theme-accent-green .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-green .app-overflow-window-actions .mdui-btn {
   color: #4CAF50;
 }
-.mdui-theme-accent-indigo .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-indigo .app-overflow-window-actions .mdui-btn {
   color: #3F51B5;
 }
-.mdui-theme-accent-light-blue .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-light-blue .app-overflow-window-actions .mdui-btn {
   color: #03A9F4;
 }
-.mdui-theme-accent-light-green .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-light-green .app-overflow-window-actions .mdui-btn {
   color: #8BC34A;
 }
-.mdui-theme-accent-lime .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-lime .app-overflow-window-actions .mdui-btn {
   color: #CDDC39;
 }
-.mdui-theme-accent-orange .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-orange .app-overflow-window-actions .mdui-btn {
   color: #ffb739;
 }
-.mdui-theme-accent-pink .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-pink .app-overflow-window-actions .mdui-btn {
   color: #E91E63;
 }
-.mdui-theme-accent-purple .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-purple .app-overflow-window-actions .mdui-btn {
   color: #9C27B0;
 }
-.mdui-theme-accent-red .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-red .app-overflow-window-actions .mdui-btn {
   color: #F44336;
 }
-.mdui-theme-accent-teal .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-teal .app-overflow-window-actions .mdui-btn {
   color: #009688;
 }
-.mdui-theme-accent-yellow .mdui-dialog-actions .mdui-btn {
+.mdui-theme-accent-yellow .app-overflow-window-actions .mdui-btn {
   color: #FFEB3B;
 }
 /**
@@ -12109,19 +12110,19 @@ body.mdui-loaded .mdui-drawer {
  * ************   Dialog dark   ************
  * =============================================================================
  */
-.mdui-theme-layout-dark .mdui-dialog {
+.mdui-theme-layout-dark .app-overflow-window {
   color: #fff;
   background-color: #424242;
 }
-.mdui-theme-layout-dark .mdui-dialog-content {
+.mdui-theme-layout-dark .app-overflow-window-content {
   color: rgba(255, 255, 255, 0.7);
 }
 @media (prefers-color-scheme: dark) {
-  .mdui-theme-layout-auto .mdui-dialog {
+  .mdui-theme-layout-auto .app-overflow-window {
     color: #fff;
     background-color: #424242;
   }
-  .mdui-theme-layout-auto .mdui-dialog-content {
+  .mdui-theme-layout-auto .app-overflow-window-content {
     color: rgba(255, 255, 255, 0.7);
   }
 }
@@ -12130,7 +12131,7 @@ body.mdui-loaded .mdui-drawer {
  * ************   Dialog alert   ************
  * =============================================================================
  */
-.mdui-dialog-alert {
+.app-overflow-window-alert {
   max-width: 448px;
 }
 /**
@@ -12138,7 +12139,7 @@ body.mdui-loaded .mdui-drawer {
  * ************   Dialog confirm   ************
  * =============================================================================
  */
-.mdui-dialog-confirm {
+.app-overflow-window-confirm {
   max-width: 448px;
 }
 /**
@@ -12146,10 +12147,10 @@ body.mdui-loaded .mdui-drawer {
  * ************   Dialog prompt   ************
  * =============================================================================
  */
-.mdui-dialog-prompt {
+.app-overflow-window-prompt {
   max-width: 448px;
 }
-.mdui-dialog-prompt .mdui-textfield {
+.app-overflow-window-prompt .mdui-textfield {
   padding-top: 0;
 }
 /**

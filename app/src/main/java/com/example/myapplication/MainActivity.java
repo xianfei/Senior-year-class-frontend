@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     WebView mWebView;
 
-    String serverAddr = "192.168.2.207:8808";
+    String serverAddr = "xianfei.ml:8808";
 
     private ValueCallback<Uri> uploadMessage;
     private ValueCallback<Uri[]> uploadMessageAboveL;
