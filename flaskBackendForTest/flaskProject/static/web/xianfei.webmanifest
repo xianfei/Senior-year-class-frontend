@@ -1,0 +1,16 @@
+{
+    "name": "奶黄喵APP",
+    "short_name": "NaihuangMiao",
+    "description": "Progressive Web App version of 奶黄喵APP.",
+    "icons": [
+        {
+            "src": "cat0.png",
+            "sizes": "320x320",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "index.html",
+    "display": "standalone",
+    "theme_color": "#FFFFFF",
+    "background_color": "#FFFFFF"
+}

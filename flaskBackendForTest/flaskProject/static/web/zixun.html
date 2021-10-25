@@ -52,15 +52,24 @@
                         timeout: 5000,
                         url: ajaxurl, data: {begin: num, end: num + 19, time: loadtime}, success: function (result) {
                             console.log(result)
-                            if(onSucceedsFun)onSucceedsFun()
+                            if (onSucceedsFun) onSucceedsFun()
                             for (var res of result) {
                                 var media
-                                if (res.attachmentType == 3) media = String.raw`
-                         <div class="mdui-card-media test_img">
-                            <img src="${res.img}"/>
-                   </div>
-                         `
-                                else if (res.attachmentType == 1)
+                                if (res.attachmentType == 3) {
+                                    imgss = ''
+                                    for (const img of res.photos) {
+                                        imgss += String.raw`<figure class="xf-fig" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+<a href="${img}" itemprop="contentUrl"><img onload="this.parentNode.setAttribute('data-size', this.naturalWidth + 'x' + this.naturalHeight);" src="${img}"  itemprop="thumbnail" /></a>
+</figure>`
+                                    }
+                                    if (res.photos.length === 1)
+                                        media = String.raw`<div class="mdui-card-media test_img" id="gallery-id-${res.momentID}">${imgss}</div>`
+                                    else if (res.photos.length ===2 || res.photos.length ===4)
+                                        media = String.raw`<div class="mdui-card-media test_img_2" id="gallery-id-${res.momentID}" style="overflow: hidden;border-radius: 10px;line-height: 0;margin: 5px"><div style="margin: -2px">${imgss}</div></div>`
+                                    else
+                                        media = String.raw`<div class="mdui-card-media test_img_3" id="gallery-id-${res.momentID}" style="overflow: hidden;border-radius: 10px;line-height: 0;margin: 5px"><div style="margin: -2px">${imgss}</div></div>`
+
+                                } else if (res.attachmentType == 1)
                                     media = String.raw`
                          <iframe class="test_iframe" src="${res.attachment}">
 
@@ -76,7 +85,7 @@
     <div class="mdui-card-header-subtitle">
     ${new Date(res.time).format("yyyy-MM-dd hh:mm:ss")}</div>
   </div>
-                  <div class="mdui-card-primary-title" style="margin-left: 5px;font-size: 18px;line-height: 26px;">${res.text}</div>
+                  <div class="mdui-card-primary-title" style="margin-left: 5px;font-size: 18px;line-height: 26px;overflow : hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: var(--max-line-clamp);-webkit-box-orient: vertical;">${res.text}</div>
  ${media}<div class="mdui-card-header-subtitle" style="text-align: end;padding:5px 0 10px 0">
 <div><span onclick="var ev = window.event || arguments.callee.caller.arguments[0];if (window.event) ev.cancelBubble = true;
 else { ev.stopPropagation();} this.innerHTML = this.innerHTML.replace(/(\d+)/g,parseInt(this.innerHTML.replace(/(\D*)(\d+)/g,'$2'))+1).replace('material-icons','material-icons mdui-icon-red')"><i class="mdui-icon material-icons">favorite_border</i> ${res.liked} &nbsp;&nbsp;
@@ -85,6 +94,9 @@ else { ev.stopPropagation();}prompt('评论##请输入评论内容')"><i class="
 
 
                 </div><div style="width: 95%;height: 1px;background: #eee;margin: auto;"></div>`)
+                                if (res.attachmentType == 3) {
+                                    initPhotoSwipeFromDOM(`#gallery-id-${res.momentID}`);
+                                }
                                 num++;
                             }
                         }, error: function (jqXHR, exception) {
@@ -135,10 +147,12 @@ else { ev.stopPropagation();}prompt('评论##请输入评论内容')"><i class="
                         setTimeout(function () {
                             // 每次下拉刷新后，上拉的状态会被自动重置
 
-                                num = 0;
-                                loadtime = new Date().getTime();
-                                 $('#test').html("")
-                                addTenCard(()=>{miniRefresh.endDownLoading()})
+                            num = 0;
+                            loadtime = new Date().getTime();
+                            $('#test').html("")
+                            addTenCard(() => {
+                                miniRefresh.endDownLoading()
+                            })
 
                         }, requestDelayTime);
                     }
@@ -147,7 +161,9 @@ else { ev.stopPropagation();}prompt('评论##请输入评论内容')"><i class="
                     isAuto: true,
                     callback: function () {
                         setTimeout(function () {
-                            addTenCard((needstop)=>{if(needstop)miniRefresh.endUpLoading(true);else miniRefresh.endUpLoading(false);})
+                            addTenCard((needstop) => {
+                                if (needstop) miniRefresh.endUpLoading(true); else miniRefresh.endUpLoading(false);
+                            })
                             console.log('will log more')
 
                         }, requestDelayTime);

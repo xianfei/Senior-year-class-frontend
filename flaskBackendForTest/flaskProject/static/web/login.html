@@ -238,7 +238,7 @@ filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2))"
         </form>
 
     </div>
-    <p align="center" style="color: #ffffff;text-shadow: 1px 1px 4px rgba(0,0,0,0.3);">比斯兔开发组 © 2021</p>
+    <p align="center" style="color: #ffffff;text-shadow: 1px 1px 4px rgba(0,0,0,0.3);">可使用用户名&密码16888登陆进行测试</p>
 </div>
 
 </body>
@@ -324,6 +324,9 @@ filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2))"
                         message: "注册成功！"
                     });
                     localStorage.setItem("loginUser", result.result.message.userID)
+                     $.post("http://39.106.25.203:1480/user/getUsersInfo",{userId:result.result.message.userID,targetUserId:result.result.message.userID},function(result2){
+                         localStorage.setItem("loginUserInfo", JSON.stringify(result2.result.message))
+                    });
                     setTimeout(()=>{window.location.reload()},100)
                 } else {
                     mdui.snackbar({

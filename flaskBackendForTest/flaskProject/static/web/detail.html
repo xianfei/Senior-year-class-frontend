@@ -10,7 +10,7 @@
 <script src="jquery.js"></script>
 <div class="mdui-appbar mdui-appbar-fixed glass" style="padding-top: var(--top-bar-height)">
     <div class="mdui-toolbar">
-        <a href="javascript:setTimeout(()=>{window.history.go(-1)},100)" class="mdui-btn mdui-btn-icon"><i
+        <a href="javascript:window.history.go(-1)" class="mdui-btn mdui-btn-icon"><i
                 class="mdui-icon material-icons">arrow_back</i></a>
         <a href="javascript:;" class="mdui-typo-title">动态详情</a>
         <div class="mdui-toolbar-spacer"></div>
@@ -34,7 +34,10 @@
 </div>
     </div>
 <script>
-    $('#target').html(currentMoment)
+    $('#target').html(currentMoment.replace("gallery-id","gallery-detail-id").replace("-webkit-line-clamp: var(--max-line-clamp);",''))
+
+    initPhotoSwipeFromDOM(`#gallery-detail-id-${currentID}`);
+
     var inst = new mdui.Menu('#menuopen', '#my-detail-menu');
     // method
     document.getElementById('menuopen').addEventListener('click', function () {
