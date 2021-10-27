@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <!-- 
+        /*!
+            * CLI Program Web Editor for C Programming Language
+            * 
+            * by xianfei
+            * 
+            * https://github.com/xianfei/
+            * 
+            * beta vesion 0.2  2021.10
+        */
+    -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLI Program Web Editor for C Programming Language</title>
+    <link rel="stylesheet" href="dist/codemirror.css">
+    <link rel="stylesheet" href="./mdui/css/mdui.css"/>
+    <script src="mdui/js/mdui.js"></script>
+    <script src="dist/codemirror.js"></script>
+    <script src="dist/clike.js"></script>
+    <script src="dist/jquery.js"></script>
+    <script src="dist/matchbrackets.js"></script>
+    <style>
+        .stderr {
+            color: rgb(189, 22, 22);
+            margin: 5px;
+            white-space: pre-line;
+        }
+
+        .stdout {
+            margin: 5px;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+
+<body style="--top-bar-height:0px">
+<div class="mdui-appbar mdui-appbar-fixed" style="padding-top: var(--top-bar-height);background: #fff">
+    <div class="mdui-toolbar">
+        <a href="javascript:window.history.go(-1)" class="mdui-btn mdui-btn-icon"><i
+                class="mdui-icon material-icons">arrow_back</i></a>
+        <a href="javascript:;" class="mdui-typo-title">发表CLI程序</a>
+        <div class="mdui-toolbar-spacer"></div>
+
+
+    </div>
+</div>
+<div style="padding: calc(var(--top-bar-height) + 64px) 10px 10px 10px">
+    程序语言：<select class="mdui-select">
+    <option value="1" selected>C</option>
+    <option value="2" disabled>Java</option>
+    <option value="3" disabled>Python</option>
+    <option value="4" disabled>Javascript</option>
+    <option value="5" disabled>Go</option>
+    <option value="6" disabled>R</option>
+</select><br>发布到分区：<select id="selectedTag" class="mdui-select">
+    <option value="1">应用程序</option>
+    <option value="2">小游戏</option>
+    <option value="3">算法</option>
+    <option value="4">交互测试题</option>
+    <option value="5">其他程序</option>
+</select>
+    <div class="mdui-textfield">
+        <textarea id="desc" class="mdui-textfield-input" placeholder="配文"></textarea>
+    </div>
+    <br>程序代码：
+    <textarea id="codearea">int main(){
+  printf("hello world!");
+  return 0;
+}</textarea>
+    <button onclick="$('#output').html('');__xf_run_c(document.getElementById('codearea').value)">执行该代码</button>
+    <button onclick="__nhm_send_cli_moment()">发布该动态</button>
+
+    <div id="output"></div>
+</div>
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById('codearea'), {
+        mode: 'text/x-csrc',
+        lineNumbers: true, // 显示行号
+        matchBrackets: true
+    });
+
+    editor.on("blur", function () {
+        editor.save();
+    });
+
+    function __nhm_send_cli_moment() {
+        $.ajax({
+            url: "http://39.106.25.203:1480/moment/createMomentWithCodeCLI",
+            data: {
+                userId: localStorage.getItem('loginUser'),
+                code: $('#codearea').val(),
+                language: 'C',
+                para: '',
+                tag: $('#selectedTag')[0].selectedOptions[0].innerText,
+                text: $('#desc').val(),
+            },
+            type: "POST",
+            success: function (result) {
+                console.log(result)
+                if (result.result.status) {
+                    alert("发送成功！")
+                    window.history.go(-1)
+                } else {
+                    mdui.snackbar({
+                        message: result.result.message
+                    });
+                }
+
+            },
+            error: function (jqXHR, exception) {
+                var msg = '';
+                if (exception === 'timeout') {
+                    msg = '连接超时.';
+                } else if (jqXHR.status === 0) {
+                    msg = '无法连接到服务器.';
+                } else if (jqXHR.status == 404) {
+                    msg = 'Requested page not found. [404]';
+                } else if (jqXHR.status == 500) {
+                    msg = 'Internal Server Error [500].';
+                } else if (exception === 'parsererror') {
+                    msg = 'Requested JSON parse failed.';
+                } else if (exception === 'timeout') {
+                    msg = '连接超时.';
+                } else if (exception === 'abort') {
+                    msg = 'Ajax request aborted.';
+                } else {
+                    msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                }
+                mdui.snackbar({
+                    message: "错误：" + msg
+                });
+            }
+        });
+    }
+
+    const __xf_output = (str) => {
+        $('#output').append($("<span class='stdout'></span>").text(str))
+    }
+    const __xf_err = (str) => {
+        $('#output').append($("<p class='stderr'></p>").text(str))
+    }
+
+
+    // format实现
+    __xf_form = function (str, arr) {
+        var i = -1;
+
+        function callback(exp, p0, p1, p2, p3, p4) {
+            if (exp == '%%') return '%';
+            if (arr[++i] === undefined) return undefined;
+            exp = p2 ? parseInt(p2.substr(1)) : undefined;
+            var base = p3 ? parseInt(p3.substr(1)) : undefined;
+            var val;
+            switch (p4) {
+                case 's':
+                    val = arr[i];
+                    break;
+                case 'c':
+                    val = arr[i][0];
+                    break;
+                case 'f':
+                    val = parseFloat(arr[i]).toFixed(exp);
+                    break;
+                case 'p':
+                    val = parseFloat(arr[i]).toPrecision(exp);
+                    break;
+                case 'e':
+                    val = parseFloat(arr[i]).toExponential(exp);
+                    break;
+                case 'x':
+                    val = parseInt(arr[i]).toString(base ? base : 16);
+                    break;
+                case 'd':
+                    val = parseFloat(parseInt(arr[i], base ? base : 10).toPrecision(exp)).toFixed(0);
+                    break;
+            }
+            val = typeof (val) == 'object' ? JSON.stringify(val) : val.toString(base);
+            var sz = parseInt(p1); /* padding size */
+            var ch = p1 && p1[0] == '0' ? '0' : ' '; /* isnull? */
+            while (val.length < sz) val = p0 !== undefined ? val + ch : ch + val; /* isminus? */
+            return val;
+        }
+
+        var regex = /%(-)?(0?[0-9]+)?([.][0-9]+)?([#][0-9]+)?([scfpexd%])/g;
+        return str.replace(regex, callback);
+    }
+
+    // 指针向量表
+    var __xf_runtime_pointer_vec = []
+
+    var __xf_ptr_address_of = (x) => {
+        __xf_runtime_pointer_vec.push(x);
+        return {"a_pointer_to": __xf_runtime_pointer_vec.length - 1 + 0xff};
+    }
+
+    var __xf_ptr_dereference = (x) => {
+        if (!x.hasOwnProperty('a_pointer_to')) throw "SegmentationFault: Illegal Adress of Dereference Operation";
+        return __xf_runtime_pointer_vec[x.a_pointer_to - 0xff];
+    }
+
+    var __xf_ptr_dereference_modify = (x, o) => {
+        if (!x.hasOwnProperty('a_pointer_to')) throw "SegmentationFault: Illegal Adress of Dereference Operation";
+        return __xf_runtime_pointer_vec[x.a_pointer_to - 0xff] = o;
+    }
+
+    function __xf_convert_c_js(str) {
+        str = str.replaceAll(/([\(,\n=+\-\*\/\s])\s*input\(/g, '$1prompt(')
+        // 预处理指令
+        var matched = str.match(/(\#define[^\n]*\n)/g)
+        if (matched) matched.forEach(e => {
+                str = str.replaceAll(e.replace(/\#define\s([^\s])\s([^\s])\n/g, "$1"), e.replace(/\#define\s([^\s])\s([^\s])\n/g, "$2"))
+            }
+        )
+        str = str.replaceAll(/(\#include[^\n]*\n)/g, '')
+        str = str.replaceAll(/(\#define[^\n]*\n)/g, '')
+        // 处理数组
+        str = str.replace(/([a-zA-Z][a-zA-z0-9]*)\[(\d?)\]\s*=\s*\{([^\}]+)\}/g, "$1=[$3]")
+        str = str.replace(/(int|void|double|char)\s([a-zA-Z][a-zA-z0-9]*)\[(\d?)\]/g, "let $2")
+        // 指针支持
+        str = str.replace(/([\(,\n=+\-\*\/])\s*(int|void|double|char)\s*\*\s*([a-zA-Z][a-zA-z0-9]*)/g, "$1let $3")
+        str = str.replace(/([\(,\n=+\-\*\/])\s*\*\s*([a-zA-Z][a-zA-z0-9]*)\s*=\s*([^\n;]+)/g, "$1__xf_ptr_dereference_modify($2,($3))")
+        str = str.replace(/([\(,\n=+\-\*\/])\s*\*\s*([a-zA-Z][a-zA-z0-9]*)/g, "$1__xf_ptr_dereference($2)")
+        str = str.replace(/([\(,\n=+\-\*\/])\s*&\s*([a-zA-Z][a-zA-z0-9]*)/g, "$1__xf_ptr_address_of($2)")
+        // 函数处理
+        matched = str.match(/(int|void|double|char)(\s+)([a-zA-z][a-zA-z0-9]*)(\()/g)
+        if (matched) matched.forEach(e => {
+                var e_ = e.replace(/(int|void|double|char)/g, "function")
+                str = str.replace(e, e_)
+            }
+        )
+        // 变量处理
+        matched = str.match(/(char\*|char\[\]|int|void|double|char)(\s+)([a-zA-z][a-zA-z0-9]*)/g)
+        if (matched) matched.forEach(e => {
+                var e_ = e.replace(/(char\*|char\[\]|int|void|double|char)/g, "let")
+                str = str.replace(e, e_)
+            }
+        )
+        // 函数参数
+        matched = str.match(/function(\s+)([a-zA-z][a-zA-z0-9]*)(\()([^\)]*)(\))/g)
+        if (matched) matched.forEach(e => {
+                // console.log(e)
+                str = str.replace(e, e.replaceAll('let', ''))
+            }
+        )
+        str = str.replaceAll('const let', 'const')
+        // 检测死循环
+        str = str.replaceAll(/for *\(.*\{|while *\(.*\{|do *\)/g, function (loopHead) {
+            console.log(loopHead)
+            return `let __xf_runtime_loop_detector_counter_id_${__xf_runtime_loop_detector_id} = 0;${loopHead};__xf_runtime_loop_detector_counter_id_${__xf_runtime_loop_detector_id}++;if(__xf_runtime_loop_detector_counter_id_${__xf_runtime_loop_detector_id}>10000)throw new Error('Maximum loop run times exceeded! (Maybe infinited loop)', 'InfiniteLoopError');`
+        })
+
+        return str.replace(/function main\([^\)]*\)/g, 'async function __xf_main_user_code_main()');
+    }
+
+    const printf = (str, ...theArgs) => {
+        __xf_output(__xf_form(str, theArgs));
+    }
+    const atoi = parseInt;
+    const atof = parseFloat;
+    const print = (x) => {
+        printf(JSON.stringify(x))
+    };
+    const sizeof = (x) => {
+        if (x.length >= 0) return x.length; else return 1;
+    }
+    let __xf_runtime_loop_detector_id = 0;
+
+
+    async function __xf_run_c(__usercode) {
+        var start_time = new Date().getTime();
+        const jscode = __xf_convert_c_js(__usercode)
+        console.log(jscode)
+        var ret = -1;
+        try {
+            eval(jscode)
+            ret = await __xf_main_user_code_main()
+        } catch (err) {
+            if (err.toString().includes('__xf_main_user_code_main')) {
+                __xf_err('Can not find entry point main()')
+                return
+            }
+            __xf_err(err.toString())
+        }
+        var end_time = new Date().getTime();
+        __xf_output("\n");
+        __xf_output("Process exited after " + (end_time - start_time) / 1000 + " seconds with return value " + ret);
+    }
+
+</script>
+</body>
+
+</html>

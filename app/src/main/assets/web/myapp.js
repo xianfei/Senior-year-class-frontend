@@ -1,69 +1,79 @@
-var ajaxurl = 'http://' + (location.search.substr(1) === '' ? 'xianfei.ml:8808' : decodeURIComponent(location.search.substr(1))) + '/getnews';
+var ajaxurl = 'http://127.0.0.1:8808/getnews';
 
-var zixuntab = '';
+var homepagetab = '';
 
-var lastPage = "zixun"
+var userInfo = JSON.parse(localStorage.getItem("loginUserInfo"));
+
+var lastPage = "homepage"
 
 var sTop = 0;
-function zixun() {
-        $('body').css('background', '#fff')
+
+var xfFrameStack = []
+
+function homepage() {
+    $('body').css('background', '#fff')
 
     $('#xf-tab').remove()
-    $('#contents').hide()
-    if(lastPage=="zixun"||zixuntab=='')$('#contents-main').load('zixun.html', function () {
+    $('#contents-mes').hide()
+    $('#contents-my').hide()
+    if (lastPage == "homepage" || homepagetab == '') $('#contents-main').load('homepage.html', function () {
         $('#mytab').append($('#xf-tab'));
-        zixuntab = $('#xf-tab')
+        homepagetab = $('#xf-tab')
     });
     else {
-        $('#mytab').append(zixuntab);
+        $('#mytab').append(homepagetab);
     }
     $('#contents-main').show()
     $('#app-title').text('')
     $('#tabbar').removeClass("xfshadow")
     $('#tabbar').removeClass("mdui-shadow-0")
     $('#tabbar').addClass("xfshadow")
-    localStorage.setItem("lastPage", "zixun")
-    lastPage  = "zixun"
+    localStorage.setItem("lastPage", "homepage")
+    lastPage = "homepage"
     document.documentElement.scrollTop = sTop
     $('#add-button').show()
+    window.history.replaceState({isReload: false}, '', '#home')
+
 }
 
 function wode() {
-        $('body').css('background', '#fff')
+    $('body').css('background', '#fff')
 
-    if(lastPage =="zixun") sTop = document.documentElement.scrollTop || document.body.scrollTop
+    if (lastPage == "homepage") sTop = document.documentElement.scrollTop || document.body.scrollTop
     lastPage = "wode"
     $('#xf-tab').remove()
     $('#app-title').text('')
     $('#contents-main').hide()
-    $('#contents').load('my.html', function () {
-        $('#contents').show()
-        $('#mytab').append($('#xf-tab'));
-    });
+    $('#contents-my').show()
+    $('#contents-mes').hide()
     $('#tabbar').removeClass("xfshadow")
     $('#tabbar').removeClass("mdui-shadow-0")
     $('#tabbar').addClass("mdui-shadow-0")
     localStorage.setItem("lastPage", "wode")
     $('#add-button').hide()
+    window.history.replaceState({isReload: false}, '', '#my')
+
 }
 
-function xiaoxi() {
-        $('body').css('background', '#fff')
+function chat() {
+    $('body').css('background', '#fff')
 
-        if(lastPage=="zixun") sTop = document.documentElement.scrollTop || document.body.scrollTop
+    if (lastPage == "homepage") sTop = document.documentElement.scrollTop || document.body.scrollTop
     $('#xf-tab').remove()
     $('#contents-main').hide()
-    $('#contents').load('xiaoxi.html', function () {
-        $('#contents').show()
-        $('#mytab').append($('#xf-tab'));
-    });
+    $('#contents-my').hide()
+    $('#contents-mes').show()
+
+
     $('#app-title').text('私聊')
     $('#tabbar').removeClass("xfshadow")
     $('#tabbar').removeClass("mdui-shadow-0")
     $('#tabbar').addClass("mdui-shadow-0")
-    localStorage.setItem("lastPage", "xiaoxi")
-    lastPage = "xiaoxi"
+    localStorage.setItem("lastPage", "chat")
+    lastPage = "chat"
     $('#add-button').hide()
+    window.history.replaceState({isReload: false}, '', '#chat')
+
 }
 
 var isInAndroid = false;
@@ -71,8 +81,6 @@ var isInAndroid = false;
 function changeSize(stat, nav) {
     isInAndroid = true;
     $('#statpadding').css('height', '' + stat + 'px');
-    $('#contents').css('padding-top', '' + (stat + 56) + 'px');
-    $('#contents').css('padding-bottom', '' + nav + 'px');
     $('#navibar').css('padding-bottom', '' + nav + 'px');
     $('body').css('--top-bar-height', '' + stat + 'px')
     $('body').css('--bottom-bar-height', '' + nav + 'px')
@@ -80,22 +88,27 @@ function changeSize(stat, nav) {
 
 var mydialog;
 window.onload = () => {
+    $('#contents-my').load('my.html');
+    $('#contents-mes').load('chat.html');
     mydialog = new mdui.Dialog('#popup');
     $('#popup')[0].addEventListener('opened.mdui.dialog', function () {
-            // window.history.pushState({ isReload: false }, '', window.location.href)
+        // window.history.pushState({ isReload: false }, '', window.location.href)
         if (isInAndroid) {
             window.open("xianfei://darkTitleBar");
         }
+        document.querySelector("meta[name=theme-color]").setAttribute("content", "#aaaaaa");
+
     });
     $('#popup')[0].addEventListener('close.mdui.dialog', function () {
         if (isInAndroid) {
             window.open("xianfei://lightTitleBar");
         }
+        document.querySelector("meta[name=theme-color]").setAttribute("content", "#ffffff");
     });
 
     window.addEventListener("popstate", function (e) {
-        if (mydialog.getState() == "closed")backCallback()
-    },false)
+        if (mydialog.getState() === "closed" && xfFrameStack.length > 0) backCallback()
+    }, false)
 
 }
 
@@ -109,54 +122,51 @@ function backCallback() {
     if (mydialog.getState() !== "closed") {
         mydialog.close();
         return ''
-    }else if(xfFrameCanGoBack){
-        $('#xf-frame').fadeOut(200)
-        document.documentElement.scrollTop = sTop
-        xfFrameCanGoBack = false;
+    } else if (xfFrameStack.length > 0) {
+        var e = xfFrameStack.pop()
+        $('#' + e.id).remove()
+        document.documentElement.scrollTop = e.sTop
         return ''
     }
     return 'exit';
 }
 
-function clickShowFull(href) {
-    $('#xf-frame').html('<br>');
-    $('#xf-frame').load(href)
-    $('#xf-frame').fadeIn(200)
-    xfFrameCanGoBack = true;
-    window.history.pushState({ isReload: false }, '', window.location.href)
-    window.history.replaceState({ isReload: false }, '', '#detail')
-    if(lastPage =="zixun") sTop = document.documentElement.scrollTop || document.body.scrollTop
+function _clickShowFrame(pageDesc) {
+    xfFrameStack.push({
+        id: 'xf-frame-' + xfFrameStack.length + 1,
+        sTop: document.documentElement.scrollTop || document.body.scrollTop
+    })
+    $('#xf-frame-stack').append(`<div id="${xfFrameStack[xfFrameStack.length - 1].id}" style="width: 100%;height: 100%;z-index: 1000;position: fixed;background: white;display: none;overflow: scroll;"></div>`)
+    window.history.pushState({isReload: false}, '', window.location.href)
+    window.history.replaceState({isReload: false}, '', '#detail' + (pageDesc ? pageDesc : ''))
+    return '#' + xfFrameStack[xfFrameStack.length - 1].id
 }
 
-Date.prototype.format = function (fmt) {
-    var o = {
-        "M+": this.getMonth() + 1,                 //月份
-        "d+": this.getDate(),                    //日
-        "h+": this.getHours(),                   //小时
-        "m+": this.getMinutes(),                 //分
-        "s+": this.getSeconds(),                 //秒
-        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-        "S": this.getMilliseconds()             //毫秒
-    };
-    if (/(y+)/.test(fmt)) {
-        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    }
-    for (var k in o) {
-        if (new RegExp("(" + k + ")").test(fmt)) {
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        }
-    }
-    return fmt;
+function clickShowFull(href, more) {
+    var e = _clickShowFrame(more ? more : '')
+    $(e).load(href)
+    $(e).fadeIn(200)
+
 }
 
-function checkWord(str){
+function clickShowIframe(href, more) {
+    var e = _clickShowFrame(more)
+    $(e).html('<iframe src="' + href + '" style="border: none;height: calc(100% - var(--top-bar-height));width:100%;margin-top: var(--top-bar-height)"> </iframe>');
+    $(e).fadeIn(200)
+}
+
+
+function checkWord(str) {
     var e = str.match(/(傻逼|操你\S|日你\S|草你\S|狗逼|六四事件|八九六四)/g)
-    if(e){
+    if (e) {
         mdui.snackbar({
-                        message: "包含敏感词："+JSON.stringify(e)
-                    });
+            message: "包含敏感词：" + JSON.stringify(e)
+        });
         return false;
-    }else{
+    } else {
         return true;
     }
 }
+
+
+

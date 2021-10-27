@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <!--
+        /*!
+            * 奶黄喵 App Index Page (Framework of display)
+            *
+            * by xianfei
+            *
+            * https://github.com/xianfei/
+            *
+            * beta vesion 0.8  2021.10
+        */
+    -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xianfei's app</title>
+    <title>奶黄喵</title>
     <link rel="stylesheet" href="mdui/css/mdui.css"/>
     <link rel="stylesheet" href="mycss.css"/>
     <script src="mdui/js/mdui.js"></script>
     <script src="myapp.js"></script>
-    <script src="jquery.js"></script>
+    <meta name="theme-color" content="#ffffff">
+    <script src="dist/jquery.js"></script>
     <link rel="manifest" href="xianfei.webmanifest">
 
     <link rel="stylesheet" href="dist/minirefresh.min.css"/>
     <script type="text/javascript" src="dist/minirefresh.min.js"></script>
-    <!-- Core CSS file -->
     <link rel="stylesheet" href="dist/photoswipe.css">
-
-    <!-- Skin CSS file (styling of UI - buttons, caption, etc.)
-         In the folder of skin CSS file there are also:
-         - .png and .svg icons sprite,
-         - preloader.gif (for browsers that do not support CSS animations) -->
     <link rel="stylesheet" href="dist/default-skin/default-skin.css">
-
-    <!-- Core JS file -->
     <script src="dist/photoswipe.min.js"></script>
-
-    <!-- UI JS file -->
     <script src="dist/photoswipe-ui-default.min.js"></script>
+        <script src="comment.js"></script>
+
 </head>
 
 <body class="mdui-bottom-nav-fixed mdui-theme-primary-orange">
@@ -39,16 +42,16 @@
         <div class="mdui-toolbar-spacer"></div>
         <ul class="mdui-menu" id="menu">
             <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple">发送文字</a>
+                <a href="javascript:clickShowIframe('post-text.html');" class="mdui-ripple">发送文字</a>
             </li>
             <li class="mdui-menu-item">
-                <a href="javascript:clickShow('uploadpic.html');" class="mdui-ripple">发送图片及文字</a>
+                <a href="javascript:clickShowIframe('post-images.html');" class="mdui-ripple">发送图片及文字</a>
             </li>
             <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple">发送视频及文字</a>
+                <a href="javascript:clickShowIframe('post-video.html');" class="mdui-ripple">发送视频及文字</a>
             </li>
             <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple">发送程序及文字</a>
+                <a href="javascript:clickShowIframe('post-cli-program.html');" class="mdui-ripple">发送程序及文字</a>
             </li>
         </ul>
         <a id="add-button" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons"
@@ -63,15 +66,22 @@
     </div> -->
 </div>
 
+<div id="xf-frame-stack"></div>
+
 <div id="xf-frame"
      style="width: 100%;height: 100%;z-index: 1000;position: fixed;background: white;display: none;overflow: scroll;"></div>
 
-<div id="contents" style="padding-top: 56px;margin: auto;max-width: 450px;display: none;">
+<div id="contents-mes" style="padding-top: calc(var(--top-bar-height) + 56px);padding-bottom: var(--bottom-bar-height);margin: auto;max-width: 450px;display: none;">
     <!--padding-top: 56+20 -->
 
 </div>
 
-<div id="contents-main" style="padding-top: 56px;margin: auto;max-width: 450px;">
+<div id="contents-my" style="padding-top: calc(var(--top-bar-height) + 56px);padding-bottom: var(--bottom-bar-height);margin: auto;max-width: 450px;display: none;">
+    <!--padding-top: 56+20 -->
+
+</div>
+
+<div id="contents-main" style="padding-top: calc(var(--top-bar-height) + 56px);padding-bottom: var(--bottom-bar-height);margin: auto;max-width: 450px;">
     <!--padding-top: 56+20 -->
 
 </div>
@@ -82,11 +92,11 @@
 </div>
 
 <div id="navibar" class="mdui-bottom-nav glass mdui-shadow-8" style="padding-bottom: 0px;z-index: 9">
-    <a onclick="zixun()" class="mdui-ripple" id="zixunTab">
+    <a onclick="homepage()" class="mdui-ripple mdui-bottom-nav-active" id="homepageTab">
         <i class="mdui-icon material-icons">home</i>
         <label>主页</label>
     </a>
-    <a onclick="xiaoxi()" class="mdui-ripple" id="xiaoxiTab">
+    <a onclick="chat()" class="mdui-ripple" id="chatTab">
         <i class="mdui-icon material-icons">inbox</i>
         <label>聊天</label>
     </a>
@@ -164,7 +174,26 @@
 </div>
 
 <script>
-    var xfFrameCanGoBack = false;
+var deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  // 防止 Chrome 67 及更早版本自动显示安装提示
+  e.preventDefault();
+  // 稍后再触发此事件
+  deferredPrompt = e;
+
+});
+
+    window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js', {scope: '/'})
+            .then(function (registration) {
+                // 注册成功
+                console.log('ServiceWorker registration successful');
+            })
+            .catch(function (err) {
+                // 注册失败:(
+                console.log('ServiceWorker registration failed');
+            });
+    });
 
     if (localStorage.getItem("loginUser") === null) {
         $('#xf-frame').load('login.html')
@@ -197,10 +226,7 @@
         console.log('closed');
     });
 
-    if (localStorage.getItem("lastPage") != null) {
-        $("#" + localStorage.getItem("lastPage") + "Tab").click();
-        $("#" + localStorage.getItem("lastPage") + "Tab").addClass('mdui-bottom-nav-active')
-    } else zixun()
+     homepage()
 </script>
 </body>
 

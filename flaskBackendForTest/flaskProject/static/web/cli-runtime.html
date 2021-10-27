@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 
+        /*!
+            * CLI Web Program Runtime for C Programming Language
+            * 
+            * by xianfei
+            * 
+            * https://github.com/xianfei/
+            * 
+            * beta vesion 0.2  2021.10
+        */
+    -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLI Web Program Runtime for C Programming Language</title>
+    <style>
+        .cli-input {
+            width: 80%;
+            color: rgb(38, 50, 56);
+            font-weight: 700;
+            font-size: 14px;
+            background: #fafafa;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+            box-sizing: border-box;
+            border: 2px solid rgba(0, 0, 0, 0.02);
+            font-family: sans-serif;
+        }
+
+        .cli-input:focus {
+            border: 2px solid rgba(0, 0, 0, 0.18) !important;
+
+        }
+
+        .cli-put {
+            position: relative;
+            cursor: pointer;
+            border-radius: 5em;
+            color: #fff;
+            background: linear-gradient(90deg, #f2994a 0%, #f7c11e 100%);
+            border: 0;
+            height: 40px;
+            width: 15%;
+            font-size: 13px;
+            box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+        }
+
+        #cli-output {
+            font-weight: 400;
+            line-height: 28px;
+            letter-spacing: 1px;
+            font-size: 16px;
+            font-family: monospace;
+            margin-left: 5px;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+
+<body>
+<div id="cli-output" style="z-index: 0;"></div>
+<div style="position: fixed;width: 100%;bottom: 10px;z-index: 20;">
+    <input class="cli-input" id="content" type="text" placeholder="输入内容…"
+           onkeydown="if(event.which==13)__xf_send()">
+    <button class="cli-put" id="inputBut" onclick="__xf_send()">提交</button>
+</div>
+<script>
+    document.getElementById('content').disabled = true;
+    document.getElementById('inputBut').style.background = '#999'
+    var __xf_input_resolve = null
+
+    let __xf_runtime_loop_detector_id = 0;
+
+    async function __xf_prog_input() {
+        document.getElementById('content').placeholder = '等待输入…'
+        document.getElementById('content').disabled = false;
+        document.getElementById('inputBut').style.background = 'linear-gradient(90deg, #f2994a 0%, #f7c11e 100%)'
+        return new Promise((resolve, reject) => {
+            __xf_input_resolve = resolve;
+        });
+
+    }
+
+    // 发送按钮回调
+    function __xf_send() {
+        if (__xf_input_resolve === null) return;
+        document.getElementById('cli-output').innerHTML += '<span style="color: #007f00;">' + document.getElementById('content').value + '<br></span>';
+        __xf_input_resolve(document.getElementById('content').value);
+        __xf_input_resolve = null
+        document.getElementById('content').value = ''
+        document.getElementById('content').placeholder = '程序运行中…'
+        document.getElementById('content').disabled = true;
+        document.getElementById('inputBut').style.background = '#999'
+    }
+
+    // 输出函数
+    const __xf_output = (str) => {
+        document.getElementById('cli-output').innerHTML += str;
+    }
+    const __xf_err = (str) => {
+        document.getElementById('cli-output').innerHTML += '<span style="color: rgb(189, 22, 22);">' + str + '</span>';
+    }
+
+
+    // format实现
+    __xf_form = function (str, arr) {
+        var i = -1;
+
+        function callback(exp, p0, p1, p2, p3, p4) {
+            if (exp == '%%') return '%';
+            if (arr[++i] === undefined) return undefined;
+            exp = p2 ? parseInt(p2.substr(1)) : undefined;
+            var base = p3 ? parseInt(p3.substr(1)) : undefined;
+            var val;
+            switch (p4) {
+                case 's':
+                    val = arr[i];
+                    break;
+                case 'c':
+                    val = arr[i][0];
+                    break;
+                case 'f':
+                    val = parseFloat(arr[i]).toFixed(exp);
+                    break;
+                case 'p':
+                    val = parseFloat(arr[i]).toPrecision(exp);
+                    break;
+                case 'e':
+                    val = parseFloat(arr[i]).toExponential(exp);
+                    break;
+                case 'x':
+                    val = parseInt(arr[i]).toString(base ? base : 16);
+                    break;
+                case 'd':
+                    val = parseFloat(parseInt(arr[i], base ? base : 10).toPrecision(exp)).toFixed(0);
+                    break;
+            }
+            val = typeof (val) == 'object' ? JSON.stringify(val) : val.toString(base);
+            var sz = parseInt(p1); /* padding size */
+            var ch = p1 && p1[0] == '0' ? '0' : ' '; /* isnull? */
+            while (val.length < sz) val = p0 !== undefined ? val + ch : ch + val; /* isminus? */
+            return val;
+        }
+
+        var regex = /%(-)?(0?[0-9]+)?([.][0-9]+)?([#][0-9]+)?([scfpexd%])/g;
+        return str.replace(regex, callback);
+    }
+
+    // 指针向量表
+    var __xf_runtime_pointer_vec = []
+
+    var __xf_ptr_address_of = (x) => {
+        __xf_runtime_pointer_vec.push(x);
+        return {"a_pointer_to": __xf_runtime_pointer_vec.length - 1 + 0xff};
+    }
+
+    var __xf_ptr_dereference = (x) => {
+        if (!x.hasOwnProperty('a_pointer_to')) throw "SegmentationFault: Illegal Adress of Dereference Operation";
+        return __xf_runtime_pointer_vec[x.a_pointer_to - 0xff];
+    }
+
+    var __xf_ptr_dereference_modify = (x, o) => {
+        if (!x.hasOwnProperty('a_pointer_to')) throw "SegmentationFault: Illegal Adress of Dereference Operation";
+        return __xf_runtime_pointer_vec[x.a_pointer_to - 0xff] = o;
+    }
+
+    function __xf_convert_c_js(str) {
+        str = str.replaceAll(/([\(,\n=+\-\*\/\s])\s*input\(/g, '$1await __xf_prog_input(')
+        // 预处理指令
+        var matched = str.match(/(\#define[^\n]*\n)/g)
+        if (matched) matched.forEach(e => {
+                str = str.replaceAll(e.replace(/\#define\s([^\s])\s([^\s])\n/g, "$1"), e.replace(/\#define\s([^\s])\s([^\s])\n/g, "$2"))
+            }
+        )
+        str = str.replaceAll(/(\#include[^\n]*\n)/g, '')
+        str = str.replaceAll(/(\#define[^\n]*\n)/g, '')
+        // 处理数组
+        str = str.replace(/([a-zA-Z][a-zA-z0-9]*)\[(\d?)\]\s*=\s*\{([^\}]+)\}/g, "$1=[$3]")
+        str = str.replace(/(int|void|double|char)\s([a-zA-Z][a-zA-z0-9]*)\[(\d?)\]/g, "let $2")
+        // 指针支持
+        str = str.replace(/([\(,\n=+\-\*\/])\s*(int|void|double|char)\s*\*\s*([a-zA-Z][a-zA-z0-9]*)/g, "$1let $3")
+        str = str.replace(/([\(,\n=+\-\*\/])\s*\*\s*([a-zA-Z][a-zA-z0-9]*)\s*=\s*([^\n;]+)/g, "$1__xf_ptr_dereference_modify($2,($3))")
+        str = str.replace(/([\(,\n=+\-\*\/])\s*\*\s*([a-zA-Z][a-zA-z0-9]*)/g, "$1__xf_ptr_dereference($2)")
+        str = str.replace(/([\(,\n=+\-\*\/])\s*&\s*([a-zA-Z][a-zA-z0-9]*)/g, "$1__xf_ptr_address_of($2)")
+        // 函数处理
+        matched = str.match(/(int|void|double|char)(\s+)([a-zA-z][a-zA-z0-9]*)(\()/g)
+        if (matched) matched.forEach(e => {
+                var e_ = e.replace(/(int|void|double|char)/g, "function")
+                str = str.replace(e, e_)
+            }
+        )
+        // 变量处理
+        matched = str.match(/(char\*|char\[\]|int|void|double|char)(\s+)([a-zA-z][a-zA-z0-9]*)/g)
+        if (matched) matched.forEach(e => {
+                var e_ = e.replace(/(char\*|char\[\]|int|void|double|char)/g, "let")
+                str = str.replace(e, e_)
+            }
+        )
+        // 函数参数
+        matched = str.match(/function(\s+)([a-zA-z][a-zA-z0-9]*)(\()([^\)]*)(\))/g)
+        if (matched) matched.forEach(e => {
+                // console.log(e)
+                str = str.replace(e, e.replaceAll('let', ''))
+            }
+        )
+        str = str.replaceAll('const let', 'const')
+        // 检测死循环
+        str = str.replaceAll(/for *\(.*\{|while *\(.*\{|do *\)/g, function (loopHead) {
+            console.log(loopHead)
+            return `let __xf_runtime_loop_detector_counter_id_${__xf_runtime_loop_detector_id} = 0;${loopHead};__xf_runtime_loop_detector_counter_id_${__xf_runtime_loop_detector_id}++;if(__xf_runtime_loop_detector_counter_id_${__xf_runtime_loop_detector_id}>10000)throw new Error('Maximum loop run times exceeded!', 'InfiniteLoopError');`
+        })
+
+        return str.replace(/function main\([^\)]*\)/g, 'async function __xf_main_user_code_main()');
+    }
+
+    const printf = (str, ...theArgs) => {
+        __xf_output(__xf_form(str, theArgs));
+    }
+    const atoi = parseInt;
+    const atof = parseFloat;
+    const print = (x) => {
+        printf(JSON.stringify(x))
+    };
+    const sizeof = (x) => {
+        if (x.length >= 0) return x.length; else return 1;
+    }
+
+
+    async function __xf_run_c(__usercode) {
+        document.getElementById('content').placeholder = '程序运行中…'
+        var start_time = new Date().getTime();
+        const jscode = __xf_convert_c_js(__usercode)
+        // console.log(jscode)
+        var ret = -1;
+        try {
+            eval(jscode)
+            ret = await __xf_main_user_code_main()
+        } catch (err) {
+            if (err.toString().includes('__xf_main_user_code_main')) {
+                __xf_err('Can not find entry point main()')
+                return
+            }
+            __xf_err(err.toString())
+        }
+        var end_time = new Date().getTime();
+        __xf_output("\n");
+        __xf_output("Process exited after " + (end_time - start_time) / 1000 + " seconds with return value " + ret);
+        document.getElementById('content').placeholder = '程序运行结束'
+    }
+
+    var code = 'int fun(int n){ if (n <= 1){ return 1; }else{ return fun(n-1) + n; }}int main(){ int num = atoi(input()); printf("%d",fun(num)); return 0;}'
+
+    var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
+    httpRequest.open('POST', 'http://39.106.25.203:1480/moment/getAppCLI', true); //第二步：打开连接
+    httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
+    httpRequest.send('appId=' + window.location.href.substr(window.location.href.indexOf('?') + 1));//发送请求 将情头体写在send中
+    /**
+     * 获取数据后的处理程序
+     */
+    httpRequest.onreadystatechange = function () {//请求后的回调接口，可将请求成功后要执行的程序写在其中
+        if (httpRequest.readyState == 4 && httpRequest.status == 200) {//验证请求是否发送成功
+            var r = JSON.parse(httpRequest.responseText);//获取到服务端返回的数据
+            if (r.result.status) __xf_run_c(r.result.message.code); else __xf_err(JSON.stringify(r.result));
+        }
+    };
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+        /*!
+            * 奶黄喵 App 'Home' Tab
+            *
+            * by xianfei
+            *
+            * https://github.com/xianfei/
+            *
+            * beta vesion 0.8  2021.10
+        */
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="./mdui/css/mdui.css"/>
+    <link rel="stylesheet" href="mycss.css"/>
+        <script src="comment.js"></script>
+</head>
+
+<body>
+
+<div id="xf-tab" style="width: 60%;position: fixed;margin-top: -48px">
+    <div class="mdui-tab" mdui-tab>
+        <a href="#example1-tab3" class="mdui-ripple" style="font-size: 20px;font-weight:800;">广场</a>
+        <a href="#example1-tab2" class="mdui-ripple" style="font-size: 20px;font-weight:800">关注</a>
+    </div>
+</div>
+
+<div id="xf-contain">
+    <div id="example1-tab1" class="mdui-p-a-2">
+        <div id="minirefresh" class="minirefresh-wrap">
+            <div class="minirefresh-scroll">
+                <div id="test">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="example1-tab2" class="mdui-p-a-2">
+        <div id="cyxz" class="mdui-appbar-with-tab">
+        </div>
+    </div>
+    <div id="example1-tab3" class="mdui-p-a-2">
+        <div id="zxxx" class="mdui-appbar-with-tab">
+        </div>
+    </div>
+    <script src="./mdui/js/mdui.js"></script>
+    <script src="dist/jquery.js"></script>
+    <script>
+        var currentID = -1;
+        var currentMoment = '';
+        var num = 0;
+        var loadtime = new Date().getTime();
+        if (true) {
+            // addTenCard();
+            var requestDelayTime = 600;
+            var miniRefresh = new MiniRefresh({
+                container: '#minirefresh',
+                down: {
+                    callback: function () {
+                        setTimeout(function () {
+                            // 每次下拉刷新后，上拉的状态会被自动重置
+                            num = 0;
+                            lastMomentId = -2
+                            loadtime = new Date().getTime();
+                            $('#test').html("")
+                            addTenCard(() => {
+                                miniRefresh.endDownLoading()
+                            })
+
+                        }, requestDelayTime);
+                    }
+                },
+                up: {
+                    isAuto: true,
+                    callback: function () {
+                        setTimeout(function () {
+                            addTenCard((needstop) => {
+                                if (needstop) miniRefresh.endUpLoading(true); else miniRefresh.endUpLoading(false);
+                            })
+                            console.log('will log more')
+
+                        }, requestDelayTime);
+                    }
+                }
+            });
+        }
+    </script>
+</div>
+</body>
+
+</html>

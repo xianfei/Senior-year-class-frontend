@@ -2,6 +2,7 @@ body {
     --top-bar-height: 0px;
     --bottom-bar-height: 0px;
     --max-line-clamp: 8;
+    overscroll-behavior: contain;
 }
 
 .card-padding {
@@ -56,6 +57,15 @@ body {
 }
 
 .test_img img {
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    max-height: calc(100vw - 20px);
+    padding: 5px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.test_img video {
     width: calc(100% - 10px);
     height: calc(100% - 10px);
     max-height: calc(100vw - 20px);
@@ -129,7 +139,7 @@ body {
     display: none;
 }
 
-.xf-zixun-tab {
+.xf-homepage-tab {
     line-height: 46px;
     margin: 10px;
 }

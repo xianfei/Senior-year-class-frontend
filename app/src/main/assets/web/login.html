@@ -1,215 +1,222 @@
 <html lang="zh-cn">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--
+        /*!
+            * 奶黄喵 App user login / register page
+            *
+            * by xianfei
+            *
+            * https://github.com/xianfei/
+            *
+            * beta vesion 0.8  2021.10
+        */
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+    <style type="text/css">
+        body {
+            background: linear-gradient(45deg, #f2994a 0%, #f2c94c 100%);
+            font-family: 'Ubuntu', sans-serif;
+        }
 
+        .main {
+            background-color: #FFFFFF;
+            width: 300px;
+            margin: 7em auto;
+            border-radius: 1.5em;
+            box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+        }
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sign in</title>
-        <style type="text/css">
-            body {
-                background: linear-gradient(45deg, #f2994a 0%, #f2c94c 100%);
-                font-family: 'Ubuntu', sans-serif;
-            }
+        .sign {
+            padding-top: 40px;
+            color: #f7a63c;
+            font-family: 'Ubuntu', sans-serif;
+            font-weight: bold;
+            font-size: 28px;
+        }
 
-            .main {
-                background-color: #FFFFFF;
-                width: 300px;
-                margin: 7em auto;
-                border-radius: 1.5em;
-                box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
-            }
+        .sign2 {
+            padding-top: 0px;
+            color: #CCCCCC;
+            font-family: 'Ubuntu', sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+        }
 
-            .sign {
-                padding-top: 40px;
-                color: #f7a63c;
-                font-family: 'Ubuntu', sans-serif;
-                font-weight: bold;
-                font-size: 28px;
-            }
+        .un {
+            width: 76%;
+            color: rgb(38, 50, 56);
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 1px;
+            background: rgba(136, 126, 126, 0.04);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+            box-sizing: border-box;
+            border: 2px solid rgba(0, 0, 0, 0.02);
+            margin-bottom: 50px;
+            margin-left: 36px;
+            text-align: center;
+            margin-bottom: 27px;
+            font-family: 'Ubuntu', sans-serif;
+        }
 
-            .sign2 {
-                padding-top: 0px;
-                color: #CCCCCC;
-                font-family: 'Ubuntu', sans-serif;
-                font-weight: bold;
-                font-size: 16px;
-            }
+        form.form1 {
+            padding-top: 20px;
+        }
 
-            .un {
-                width: 76%;
-                color: rgb(38, 50, 56);
-                font-weight: 700;
-                font-size: 14px;
-                letter-spacing: 1px;
-                background: rgba(136, 126, 126, 0.04);
-                padding: 10px 20px;
-                border: none;
-                border-radius: 20px;
-                outline: none;
-                box-sizing: border-box;
-                border: 2px solid rgba(0, 0, 0, 0.02);
-                margin-bottom: 50px;
-                margin-left: 36px;
-                text-align: center;
-                margin-bottom: 27px;
-                font-family: 'Ubuntu', sans-serif;
-            }
+        .pass {
+            width: 76%;
+            color: rgb(38, 50, 56);
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 1px;
+            background: rgba(136, 126, 126, 0.04);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+            box-sizing: border-box;
+            border: 2px solid rgba(0, 0, 0, 0.02);
+            margin-bottom: 50px;
+            margin-left: 36px;
+            text-align: center;
+            margin-bottom: 27px;
+            font-family: 'Ubuntu', sans-serif;
+        }
 
-            form.form1 {
-                padding-top: 20px;
-            }
+        .pass:focus {
+            border: 2px solid rgba(0, 0, 0, 0.18) !important;
 
-            .pass {
-                width: 76%;
-                color: rgb(38, 50, 56);
-                font-weight: 700;
-                font-size: 14px;
-                letter-spacing: 1px;
-                background: rgba(136, 126, 126, 0.04);
-                padding: 10px 20px;
-                border: none;
-                border-radius: 20px;
-                outline: none;
-                box-sizing: border-box;
-                border: 2px solid rgba(0, 0, 0, 0.02);
-                margin-bottom: 50px;
-                margin-left: 36px;
-                text-align: center;
-                margin-bottom: 27px;
-                font-family: 'Ubuntu', sans-serif;
-            }
+        }
 
-            .pass:focus {
-                border: 2px solid rgba(0, 0, 0, 0.18) !important;
+        .submit {
+            cursor: pointer;
+            border-radius: 5em;
+            color: #fff;
+            background: linear-gradient(90deg, #ff7e5f 0%, #feb47b 100%);
+            border: 0;
+            padding-left: 40px;
+            padding-right: 40px;
+            padding-bottom: 10px;
+            padding-top: 10px;
+            font-family: 'Ubuntu', sans-serif;
+            margin-left: 30%;
+            font-size: 13px;
+            box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+        }
 
-            }
+        .submit2 {
+            cursor: pointer;
+            border-radius: 5em;
+            color: #fff;
+            background: linear-gradient(270deg, #d66d75 0%, #e29587 100%);
+            border: 0;
+            padding-left: 40px;
+            padding-right: 40px;
+            padding-bottom: 10px;
+            padding-top: 10px;
+            font-family: 'Ubuntu', sans-serif;
+            margin-left: 30%;
+            font-size: 13px;
+            box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+        }
 
-            .submit {
-                cursor: pointer;
-                border-radius: 5em;
-                color: #fff;
-                background: linear-gradient(90deg, #ff7e5f 0%, #feb47b 100%);
-                border: 0;
-                padding-left: 40px;
-                padding-right: 40px;
-                padding-bottom: 10px;
-                padding-top: 10px;
-                font-family: 'Ubuntu', sans-serif;
-                margin-left: 30%;
-                font-size: 13px;
-                box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
-            }
+        .forgot {
+            text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
+            color: #E1BEE7;
+            padding-top: 15px;
+        }
 
-            .submit2 {
-                cursor: pointer;
-                border-radius: 5em;
-                color: #fff;
-                background: linear-gradient(270deg, #d66d75 0%, #e29587 100%);
-                border: 0;
-                padding-left: 40px;
-                padding-right: 40px;
-                padding-bottom: 10px;
-                padding-top: 10px;
-                font-family: 'Ubuntu', sans-serif;
-                margin-left: 30%;
-                font-size: 13px;
-                box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
-            }
+        a {
+            color: #e8a832;
+            text-decoration: none
+        }
 
-            .forgot {
-                text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
-                color: #E1BEE7;
-                padding-top: 15px;
-            }
+        /* Customize the label (the ckb_box) */
+        .ckb_box {
+            display: block;
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 20px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
 
-            a {
-                color: #e8a832;
-                text-decoration: none
-            }
+        /* Hide the browser's default checkbox */
+        .ckb_box input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
 
-            /* Customize the label (the ckb_box) */
-            .ckb_box {
-                display: block;
-                position: relative;
-                padding-left: 30px;
-                margin-bottom: 12px;
-                cursor: pointer;
-                font-size: 14px;
-                line-height: 20px;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
+        /* Create a custom checkbox */
+        .checkmark {
+            border-radius: 10px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #eee;
+        }
 
-            /* Hide the browser's default checkbox */
-            .ckb_box input {
-                position: absolute;
-                opacity: 0;
-                cursor: pointer;
-                height: 0;
-                width: 0;
-            }
+        /* On mouse-over, add a grey background color */
+        .ckb_box:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
 
-            /* Create a custom checkbox */
-            .checkmark {
-                border-radius: 10px;
-                position: absolute;
-                top: 0;
-                left: 0;
-                height: 20px;
-                width: 20px;
-                background-color: #eee;
-            }
+        /* When the checkbox is checked, add a blue background */
+        .ckb_box input:checked ~ .checkmark {
+            background-color: #f5a336;
+        }
 
-            /* On mouse-over, add a grey background color */
-            .ckb_box:hover input ~ .checkmark {
-                background-color: #ccc;
-            }
+        /* Create the checkmark/indicator (hidden when not checked) */
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
 
-            /* When the checkbox is checked, add a blue background */
-            .ckb_box input:checked ~ .checkmark {
-                background-color: #f5a336;
-            }
+        .ckb_box input:checked ~ .checkmark:after {
+            display: block;
+        }
 
-            /* Create the checkmark/indicator (hidden when not checked) */
-            .checkmark:after {
-                content: "";
-                position: absolute;
-                display: none;
-            }
+        .ckb_box .checkmark:after {
+            left: 7px;
+            top: 4px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
 
-            /* Show the checkmark when checked */
-            .ckb_box input:checked ~ .checkmark:after {
-                display: block;
-            }
+    </style>
+    <script src="dist/jquery.js"></script>
 
-            /* Style the checkmark/indicator */
-            .ckb_box .checkmark:after {
-                left: 7px;
-                top: 4px;
-                width: 4px;
-                height: 8px;
-                border: solid white;
-                border-width: 0 3px 3px 0;
-                -webkit-transform: rotate(45deg);
-                -ms-transform: rotate(45deg);
-                transform: rotate(45deg);
-            }
-
-        </style>
-        <script src="jquery.js"></script>
-
-    </head>
+</head>
 
 <body>
 <div style="width: 100%;height: 100%;position: fixed;overflow:scroll;background: linear-gradient(45deg, #f2994a 0%, #f2c94c 100%);">
 
     <div class="main">
         <div style="text-align: center;">
-            <img src="cat0.png" style="width: 120px;margin: -60px auto;filter:sepia(0.7);-webkit-filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2));
+            <img src="img/cat0.png" style="width: 120px;margin: -60px auto;filter:sepia(0.7);-webkit-filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2));
 filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2))"
-            onclick="this.src = 'cat' + (++iconI%4) +'.png'">
+                 onclick="this.src = 'img/cat' + (++iconI%4) +'.png'">
         </div>
         <p class="sign" align="center">奶黄喵</p>
         <p class="sign2" align="center">更有趣的可编程社交平台</p>
@@ -225,7 +232,8 @@ filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2))"
                         type="radio" id="male" name="xingbie" checked><span class="checkmark"></span></label>
                     <label class="ckb_box" style="position: relative;margin-top: -32px;margin-left: 100px">女<input
                             type="radio" name="xingbie" id="female"><span class="checkmark"></span></label><br>
-                    <label class="ckb_box" style="margin-left: 7px;">我同意<a href="javascript:clickShow('xieyi.html')">用户协议</a>
+                    <label class="ckb_box" style="margin-left: 7px;">我同意<a
+                            href="javascript:clickShow('user-agreement.html')">用户协议</a>
                         <input type="checkbox" id="agree">
                         <span class="checkmark"></span>
                     </label>
@@ -238,13 +246,14 @@ filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2))"
         </form>
 
     </div>
-    <p align="center" style="color: #ffffff;text-shadow: 1px 1px 4px rgba(0,0,0,0.3);">比斯兔开发组 © 2021</p>
+    <p align="center" style="color: #ffffff;text-shadow: 1px 1px 4px rgba(0,0,0,0.3);">可使用用户名&密码16888登陆进行测试</p>
 </div>
 
 </body>
 
 <script>
     var iconI = 0;
+
     function login() {
         $.ajax({
             url: "http://39.106.25.203:1480/user/logIn",
@@ -257,9 +266,13 @@ filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2))"
                         message: "登录成功！"
                     });
                     localStorage.setItem("loginUser", result.result.message.userID)
-                    $('#xf-frame').fadeOut(800)
-                    $.post("http://39.106.25.203:1480/user/getUsersInfo",{userId:result.result.message.userID,targetUserId:result.result.message.userID},function(result2){
-                         localStorage.setItem("loginUserInfo", JSON.stringify(result2.result.message))
+
+                    $.post("http://39.106.25.203:1480/user/getUsersInfo", {
+                        userId: result.result.message.userID,
+                        targetUserId: result.result.message.userID
+                    }, function (result2) {
+                        localStorage.setItem("loginUserInfo", JSON.stringify(result2.result.message))
+                        window.location.reload()
                     });
                 } else {
                     mdui.snackbar({
@@ -268,29 +281,29 @@ filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2))"
                 }
 
             },
-             error: function (jqXHR, exception) {
-                    var msg = '';
-                    if (exception === 'timeout') {
-                        msg = '连接超时.';
-                    } else if (jqXHR.status === 0) {
-                        msg = '无法连接到服务器.';
-                    } else if (jqXHR.status == 404) {
-                        msg = 'Requested page not found. [404]';
-                    } else if (jqXHR.status == 500) {
-                        msg = 'Internal Server Error [500].';
-                    } else if (exception === 'parsererror') {
-                        msg = 'Requested JSON parse failed.';
-                    } else if (exception === 'timeout') {
-                        msg = '连接超时.';
-                    } else if (exception === 'abort') {
-                        msg = 'Ajax request aborted.';
-                    } else {
-                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
-                    }
-                    mdui.snackbar({
-                        message: "错误：" + msg
-                    });
+            error: function (jqXHR, exception) {
+                var msg = '';
+                if (exception === 'timeout') {
+                    msg = '连接超时.';
+                } else if (jqXHR.status === 0) {
+                    msg = '无法连接到服务器.';
+                } else if (jqXHR.status == 404) {
+                    msg = 'Requested page not found. [404]';
+                } else if (jqXHR.status == 500) {
+                    msg = 'Internal Server Error [500].';
+                } else if (exception === 'parsererror') {
+                    msg = 'Requested JSON parse failed.';
+                } else if (exception === 'timeout') {
+                    msg = '连接超时.';
+                } else if (exception === 'abort') {
+                    msg = 'Ajax request aborted.';
+                } else {
+                    msg = 'Uncaught Error.\n' + jqXHR.responseText;
                 }
+                mdui.snackbar({
+                    message: "错误：" + msg
+                });
+            }
         });
     }
 
@@ -307,7 +320,7 @@ filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2))"
             });
             return;
         }
-        if(!checkWord($('#name').val()))return;
+        if (!checkWord($('#name').val())) return;
         $.ajax({
             url: "http://39.106.25.203:1480/user/register",
             data: {
@@ -324,7 +337,9 @@ filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2))"
                         message: "注册成功！"
                     });
                     localStorage.setItem("loginUser", result.result.message.userID)
-                    setTimeout(()=>{window.location.reload()},100)
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 100)
                 } else {
                     mdui.snackbar({
                         message: result.result.message
@@ -333,28 +348,28 @@ filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2))"
 
             },
             error: function (jqXHR, exception) {
-                    var msg = '';
-                    if (exception === 'timeout') {
-                        msg = '连接超时.';
-                    } else if (jqXHR.status === 0) {
-                        msg = '无法连接到服务器.';
-                    } else if (jqXHR.status == 404) {
-                        msg = 'Requested page not found. [404]';
-                    } else if (jqXHR.status == 500) {
-                        msg = 'Internal Server Error [500].';
-                    } else if (exception === 'parsererror') {
-                        msg = 'Requested JSON parse failed.';
-                    } else if (exception === 'timeout') {
-                        msg = '连接超时.';
-                    } else if (exception === 'abort') {
-                        msg = 'Ajax request aborted.';
-                    } else {
-                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
-                    }
-                    mdui.snackbar({
-                        message: "错误：" + msg
-                    });
+                var msg = '';
+                if (exception === 'timeout') {
+                    msg = '连接超时.';
+                } else if (jqXHR.status === 0) {
+                    msg = '无法连接到服务器.';
+                } else if (jqXHR.status == 404) {
+                    msg = 'Requested page not found. [404]';
+                } else if (jqXHR.status == 500) {
+                    msg = 'Internal Server Error [500].';
+                } else if (exception === 'parsererror') {
+                    msg = 'Requested JSON parse failed.';
+                } else if (exception === 'timeout') {
+                    msg = '连接超时.';
+                } else if (exception === 'abort') {
+                    msg = 'Ajax request aborted.';
+                } else {
+                    msg = 'Uncaught Error.\n' + jqXHR.responseText;
                 }
+                mdui.snackbar({
+                    message: "错误：" + msg
+                });
+            }
         });
     }
 

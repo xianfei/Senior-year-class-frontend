@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <!--
+        /*!
+            * 奶黄喵 App post video with text page
+            *
+            * by xianfei
+            *
+            * https://github.com/xianfei/
+            *
+            * beta vesion 0.8  2021.10
+        */
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>图片上传</title>
+    <script src="dist/jquery.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #btnSubmit{
+            padding: 10px;
+        }
+
+        #previewBox {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -2px;
+        }
+
+        #previewBox .item {
+            width: 100%;
+            height: 300px;
+            margin: 2px;
+            position: relative;
+            display: flex;
+            border-radius: 0px;
+            overflow: hidden;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #previewBox .item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #previewBox .item .btnRemove {
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: red;
+            color: #fff;
+            font-size: 12px;
+            padding: 0 5px;
+            height: 20px;
+            line-height: 20px;
+            cursor: pointer;
+        }
+
+        #previewBox .item .btnRemove:hover {
+            background-color: blue;
+        }
+
+        #btnAdd {
+            text-decoration: none;
+            background: url('img/add.png') no-repeat center center;
+            position: relative;
+        }
+
+        #btnAdd.off {
+            display: none;
+        }
+
+        #btnAdd:hover {
+            background-color: #ccc;
+        }
+
+        #file {
+            width: 0;
+            height: 0;
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            opacity: 0;
+        }
+
+        .console {
+            margin: 20px;;
+        }
+
+        #consoleBox {
+            font-size: 12px;
+            height: 300px;
+            margin-top: 10px;
+            padding: 8px;
+            overflow: hidden;
+            overflow-y: auto;
+        }
+
+        #consoleBox > div {
+            margin-top: 10px;
+            word-break: break-all;
+        }
+
+        #consoleBox > div img {
+            width: 50px;
+            height: 50px;
+        }
+
+        #footer {
+            margin: 10px;
+        }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+    <script src="dist/compressor.js"></script>
+    <link rel="stylesheet" href="./mdui/css/mdui.css"/>
+</head>
+<body>
+<div class="mdui-appbar mdui-appbar-fixed" style="background: #fff">
+    <div class="mdui-toolbar">
+        <a href="javascript:window.history.go(-1)" class="mdui-btn mdui-btn-icon"><i
+                class="mdui-icon material-icons">arrow_back</i></a>
+        <a href="javascript:;" class="mdui-typo-title">发表视频</a>
+        <div class="mdui-toolbar-spacer"></div>
+
+
+    </div>
+</div>
+<div style="height: 56px;width: 100%"></div>
+<div style="margin: 10px;">发布到分区：<select id="selectedTag" class="mdui-select">
+    <option value="1">日常</option>
+    <option value="2">健身</option>
+    <option value="3">美食</option>
+    <option value="4">学习</option>
+    <option value="5">感想</option>
+</select></div>
+<textarea id="desc" placeholder="记录这一刻，晒给懂你的人…"
+          style="width: calc(100% - 40px); margin: 10px;padding:10px;height:100px;border-radius: 15px;border: 2px #ddd solid;"></textarea>
+<div style="
+    margin: 10px;
+    border-radius: 15px;
+    overflow: hidden;
+">
+    <div id="previewBox">
+        <a href="javascript:;" id="btnAdd" class="item" title="添加图片"><input id="file" type="file" accept="video/*"/></a>
+    </div>
+</div>
+<div class="console">
+    <button id="btnSubmit">提交到服务端</button>
+    <div id="consoleBox"></div>
+</div>
+<div id="footer">
+
+</div>
+<script>
+    maxPic = 1;
+    processedPic = []
+    btnAdd = document.querySelector("#btnAdd");
+    file = document.querySelector("#file");
+    consoleBox = document.querySelector("#consoleBox");
+    /**
+     * 用户选择的文件数组
+     */
+    useFiles = [];
+
+    /**
+     *显隐添加图片按钮
+     */
+    function setAddVisible() {
+        btnAdd.classList[useFiles.length >= maxPic ? 'add' : 'remove']("off");
+    }
+
+    /**
+     * 日志输出
+     */
+    function consoleLog(value) {
+        const div = document.createElement("div");
+        const now = new Date();
+        div.innerHTML = `[${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}] ${value}`;
+        consoleBox.appendChild(div);
+    }
+
+    /**清理数据*/
+    function clear() {
+        useFiles.length = 0;
+        let previews = document.querySelectorAll("#previewBox>.item");
+        for (let index = 0; index < previews.length; index++) {
+            const element = previews[index];
+            if (element !== btnAdd) {
+                element.parentNode.removeChild(element);
+            }
+        }
+    }
+
+
+    //文件框change事件响应,检测图片资源
+    file.addEventListener("change", function (e) {
+        let files = e.target.files;
+        if (files.length === 0) return;
+        let file = files[0];
+        //重置隐藏input信息
+        e.target.value = "";
+            //添加dom预览元素
+            let item = document.createElement("div");
+            item.className = "item";
+            item.file = file;
+            let preview = document.createElement("video");
+            preview.src = URL.createObjectURL(file);
+            item.appendChild(preview);
+            //创建删除按钮
+            let btnRemove = document.createElement("span");
+            btnRemove.className = "btnRemove";
+            btnRemove.innerHTML = "X";
+            btnRemove.addEventListener("click", function (e) {
+                let item = e.target.parentNode;
+                item.parentNode.removeChild(item);
+                let file = item.file;
+                if (file) {
+                    let index = useFiles.indexOf(file);
+                    if (index != -1) {
+                        useFiles.splice(index, 1);
+                    }
+                }
+                setAddVisible();
+            });
+            item.appendChild(btnRemove);
+            //添加到容器
+            let previewBox = document.querySelector("#previewBox");
+            if (previewBox) {
+                previewBox.insertBefore(item, btnAdd);
+            }
+            //添加到数组
+            useFiles.push(file);
+            //显隐添加按钮
+            setAddVisible();
+
+    });
+    //添加图片事件注册
+    if (btnAdd) {
+        btnAdd.addEventListener("click", function (e) {
+            if (useFiles.length >= maxPic) {
+                consoleLog("最多只能添加" + maxPic + "张图片");
+                return;
+            }
+            //触发隐藏的input[type=file]事件
+            if (file) {
+                file.click();
+            }
+        });
+    }
+    //提交事件注册
+    btnSubmit = document.querySelector("#btnSubmit");
+    if (btnSubmit) {
+        btnSubmit.addEventListener("click", function (e) {
+
+            //提交资源
+            if (useFiles.length === 0) {
+                consoleLog("请添加视频");
+                return;
+            }
+            consoleLog("正在上传，请稍等……");
+            useFiles.forEach((item, index) => {
+
+                const formData = new FormData();
+                // The third parameter is required for server
+                formData.append('editormd-image-file', item, item.name);
+                //添加其他非图片字段信息
+                formData.append("userId", localStorage.getItem('loginUser'));
+                formData.append("tag", $('#selectedTag')[0].selectedOptions[0].innerText);
+                formData.append("text", $('#desc').val());
+                // formData.append("time",Date.now());
+                window.formData = formData;
+                //ajax
+                consoleLog("图片处理完成，正在上传……");
+                fetch("http://39.106.25.203:1480/moment/createMomentWithVideo", {
+                    body: formData,
+                    method: "post"
+                }).then(res => {
+                    if (res.status !== 200) {
+                        consoleLog("提交失败:status=" + res.status);
+                        return;
+                    }
+                    res.json().then(json => {
+                        let html = `提交完毕,服务端返回:${JSON.stringify(json)}<div>`
+                        html += '</div>'
+                        //清理历史信息
+                        clear();
+                        consoleLog(html);
+                    }).catch(ex => {
+                        consoleLog("解析返回值失败:" + ex.toString());
+                    });
+                }).catch(ex => {
+                    consoleLog("提交失败:" + ex.toString());
+                });
+
+            });
+
+        });
+    }
+</script>
+</body>
+</html>

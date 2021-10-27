@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <!-- 
+        /*!
+            * CLI Program Web Editor for C Programming Language
+            * 
+            * by xianfei
+            * 
+            * https://github.com/xianfei/
+            * 
+            * beta vesion 0.2  2021.10
+        */
+    -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLI Program Web Editor for C Programming Language</title>
+    <link rel="stylesheet" href="dist/codemirror.css">
+    <link rel="stylesheet" href="./mdui/css/mdui.css"/>
+    <script src="mdui/js/mdui.js"></script>
+    <script src="dist/codemirror.js"></script>
+    <script src="dist/clike.js"></script>
+    <script src="dist/jquery.js"></script>
+    <script src="dist/matchbrackets.js"></script>
+    <style>
+        .stderr {
+            color: rgb(189, 22, 22);
+            margin: 5px;
+            white-space: pre-line;
+        }
+
+        .stdout {
+            margin: 5px;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+
+<body style="--top-bar-height:0px">
+<div class="mdui-appbar mdui-appbar-fixed" style="padding-top: var(--top-bar-height);background: #fff">
+    <div class="mdui-toolbar">
+        <a href="javascript:window.history.go(-1)" class="mdui-btn mdui-btn-icon"><i
+                class="mdui-icon material-icons">arrow_back</i></a>
+        <a href="javascript:;" class="mdui-typo-title">查看源代码</a>
+        <div class="mdui-toolbar-spacer"></div>
+
+
+    </div>
+</div>
+<div style="padding: calc(var(--top-bar-height) + 64px) 10px 10px 10px">
+
+    <br>程序代码：
+    <textarea id="codearea">int main(){
+  printf("hello world!");
+  return 0;
+}</textarea>
+
+</div>
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById('codearea'), {
+        mode: 'text/x-csrc',
+        lineNumbers: true, // 显示行号
+        matchBrackets: true
+    });
+
+    editor.on("blur", function () {
+        editor.save();
+    });
+
+
+    const __xf_output = (str) => {
+        $('#output').append($("<span class='stdout'></span>").text(str))
+    }
+    const __xf_err = (str) => {
+        $('#output').append($("<p class='stderr'></p>").text(str))
+    }
+
+    var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
+    httpRequest.open('POST', 'http://39.106.25.203:1480/moment/getAppCLI', true); //第二步：打开连接
+    httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
+    httpRequest.send('appId=' + window.location.href.substr(window.location.href.indexOf('?') + 1));//发送请求 将情头体写在send中
+    /**
+     * 获取数据后的处理程序
+     */
+    httpRequest.onreadystatechange = function () {//请求后的回调接口，可将请求成功后要执行的程序写在其中
+        if (httpRequest.readyState == 4 && httpRequest.status == 200) {//验证请求是否发送成功
+            var r = JSON.parse(httpRequest.responseText);//获取到服务端返回的数据
+            if (r.result.status)$('#codearea').val(r.result.message.code); else __xf_err(JSON.stringify(r.result));
+        }
+    };
+
+</script>
+</body>
+
+</html>

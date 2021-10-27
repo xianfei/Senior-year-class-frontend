@@ -99,11 +99,11 @@ def hello_world():
                          'attachmentType': 0},
                         )
         else:
-                items.append({'momentID':123+i,'index': i, 'text': text if i%5!=2 else '这是一条卡片交互程序测试动态', 'photos': imgs,
-                      "userName": "衔飞飞飞飞", "userAvatar": "avatar.jpg","userId":"16888",
+                items.append({'momentID':123+i,'index': i, 'text': text if i%5!=2 else ('这是一条卡片交互程序测试动态' if i%10==2 else '这是CLI程序测试动态\nint fun(int n){ \nif (n <= 1){ return 1; }\nelse{ return fun(n-1) + n; }\n}\nint main(){\nprintf("please input a number:"); \nint num = atoi(input()); \nprintf("%d",fun(num)); \nreturn 0;\n}') , 'photos': imgs,
+                      "userName": "衔飞飞飞飞", "userAvatar": "img/avatar.jpg","userId":"16888",
                       'liked': random.randint(0, 5),
                       'comment': random.randint(0, 5), 'time': (time-i*21987),'attachmentType':(1 if i%5==2 else 3),
-                      "attachment":"http://127.0.0.1:8808/static/2048/index.html"},
+                      "attachment":"http://127.0.0.1:8808/static/2048/index.html" if i%10==2 else "cli-runtime.html"},
                      )
     return jsonify(items)
 

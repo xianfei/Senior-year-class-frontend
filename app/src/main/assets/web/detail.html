@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!--
+        /*!
+            * 奶黄喵 App moment detail view page
+            *
+            * by xianfei
+            *
+            * https://github.com/xianfei/
+            *
+            * beta vesion 0.8  2021.10
+        */
+    -->
     <meta charset="UTF-8">
     <link rel="stylesheet" href="./mdui/css/mdui.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
 </head>
 <body>
-<script src="jquery.js"></script>
+<script src="dist/jquery.js"></script>
 <div class="mdui-appbar mdui-appbar-fixed glass" style="padding-top: var(--top-bar-height)">
     <div class="mdui-toolbar">
-        <a href="javascript:setTimeout(backCallback,100)" class="mdui-btn mdui-btn-icon"><i
+        <a href="javascript:window.history.go(-1)" class="mdui-btn mdui-btn-icon"><i
                 class="mdui-icon material-icons">arrow_back</i></a>
         <a href="javascript:;" class="mdui-typo-title">动态详情</a>
         <div class="mdui-toolbar-spacer"></div>
@@ -23,17 +34,21 @@
   </ul>
     </div>
 </div>
+<div style="max-width: 450px;margin: auto">
 
-
-<div id="target" style="padding: calc(var(--top-bar-height) + 60px) 10px 10px 10px">
+<div id="target" style="padding: calc(var(--top-bar-height) + 56px) 10px 10px 10px">
 </div>
 <div class="mdui-row mdui-row-gapless" style="margin: 10px">
 
 
     <div id="comment">暂无评论</div>
 </div>
+    </div>
 <script>
-    $('#target').html(currentMoment)
+    $('#target').html((currentMoment?currentMoment:parent.window.currentMoment).replace("gallery-id","gallery-detail-id").replace("-webkit-line-clamp: var(--max-line-clamp);",'').replace('style="display: none"',''))
+
+    initPhotoSwipeFromDOM(`#gallery-detail-id-${currentID}`);
+
     var inst = new mdui.Menu('#menuopen', '#my-detail-menu');
     // method
     document.getElementById('menuopen').addEventListener('click', function () {

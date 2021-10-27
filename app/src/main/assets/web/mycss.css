@@ -1,6 +1,8 @@
-body{
-    --top-bar-height:0px;
-    --bottom-bar-height:0px;
+body {
+    --top-bar-height: 0px;
+    --bottom-bar-height: 0px;
+    --max-line-clamp: 8;
+    overscroll-behavior: contain;
 }
 
 .card-padding {
@@ -12,8 +14,19 @@ body{
     grid-row-gap: 5px;
 }
 
-.mdui-icon-red{
-    color:#ff8d3a;
+.momentCard {
+    margin: 0px 10px 0px 10px;
+}
+
+@media screen and (min-width: 450px) {
+    .momentCard {
+        margin: 0px auto 0px auto;
+        max-width: 450px;
+    }
+}
+
+.mdui-icon-red {
+    color: #ff8d3a;
 }
 
 ::-webkit-scrollbar {
@@ -39,7 +52,8 @@ body{
     box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.05);
 }
 
-.test_img {
+.test_img .xf-fig {
+    margin: 0;
 }
 
 .test_img img {
@@ -51,13 +65,73 @@ body{
     border-radius: 15px;
 }
 
+.test_img video {
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    max-height: calc(100vw - 20px);
+    padding: 5px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.test_img_3 .xf-fig {
+    width: calc((100% - 12px) / 3);
+    padding-top: calc((100% - 12px) / 3);
+    margin: 2px;
+    position: relative;
+    display: inline-block;
+    border-radius: 0px;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+}
+
+.test_img_3 .xf-fig img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.test_img_2 .xf-fig {
+    width: calc((100% - 8px) / 2);
+    padding-top: calc((100% - 8px) / 2);
+    margin: 2px;
+    position: relative;
+    display: inline-block;
+    border-radius: 0px;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+}
+
+.test_img_2 .xf-fig img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.minirefresh-wrap {
+    margin-top: calc(var(--top-bar-height) + 56px);
+    margin-bottom: calc(var(--bottom-bar-height) + 56px);
+}
+
 .test_iframe {
     width: calc(100% - 10px);
     height: calc(75vw);
     max-height: 350px;
-    padding: 5px;
+    margin: 5px;
     border-radius: 15px;
-    border: none;
+    border: 1px #eee solid;
     overflow: hidden;
 }
 
@@ -65,7 +139,7 @@ body{
     display: none;
 }
 
-.xf-zixun-tab{
+.xf-homepage-tab {
     line-height: 46px;
     margin: 10px;
 }

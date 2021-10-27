@@ -41,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
     WebView mWebView;
 
-    String serverAddr = "xianfei.ml:8808";
-
     private ValueCallback<Uri> uploadMessage;
     private ValueCallback<Uri[]> uploadMessageAboveL;
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
@@ -102,11 +100,7 @@ public class MainActivity extends AppCompatActivity {
         }
         // 格式规定为:file:///android_asset/文件名.html
         if (savedInstanceState == null) {
-            try {
-                mWebView.loadUrl("file:///android_asset/web/index.html?" + URLEncoder.encode(serverAddr, "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                mWebView.loadUrl("file:///android_asset/web/index.html?127.0.0.1");
-            }
+            mWebView.loadUrl("file:///android_asset/web/index.html");
         } else mWebView.restoreState(savedInstanceState);
         mWebView.setWebChromeClient(new WebChromeClient() {
             //=========多窗口的问题==========================================================
@@ -229,14 +223,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         AtomicBoolean shouldRet = new AtomicBoolean(true);
-        if(mWebView.canGoBack()){
+        if(mWebView.canGoBack()) {
             mWebView.goBack();
             return;
-        }else{mWebView.evaluateJavascript("javascript:backCallback()", value -> {
-            if (value.contains("exit")) super.onBackPressed();
-            else shouldRet.set(false);
-        });
         }
+//        else{mWebView.evaluateJavascript("javascript:backCallback()", value -> {
+//            if (value.contains("exit")) super.onBackPressed();
+//            else shouldRet.set(false);
+//        });
+//        }
         if (shouldRet.get())super.onBackPressed();
     }
 

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <!--
+        /*!
+            * 奶黄喵 App post text page
+            *
+            * by xianfei
+            *
+            * https://github.com/xianfei/
+            *
+            * beta vesion 0.8  2021.10
+        */
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Title</title>
+    <script src="dist/jquery.js"></script>
+    <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        #btnSubmit{
+            padding: 10px;
+        }
+    </style>
+        <link rel="stylesheet" href="./mdui/css/mdui.css"/>
+
+</head>
+<body>
+<div class="mdui-appbar mdui-appbar-fixed" style="background: #fff">
+    <div class="mdui-toolbar">
+        <a href="javascript:window.history.go(-1)" class="mdui-btn mdui-btn-icon"><i
+                class="mdui-icon material-icons">arrow_back</i></a>
+        <a href="javascript:;" class="mdui-typo-title">发表文字</a>
+        <div class="mdui-toolbar-spacer"></div>
+
+
+    </div>
+</div>
+<div style="height: 56px;width: 100%"></div>
+<div style="margin: 10px;">发布到分区：<select id="selectedTag" class="mdui-select">
+    <option value="1">日常</option>
+    <option value="2">健身</option>
+    <option value="3">美食</option>
+    <option value="4">学习</option>
+    <option value="5">感想</option>
+</select></div>
+<textarea id="desc" placeholder="记录这一刻，晒给懂你的人…"
+          style="width: calc(100% - 40px); margin: 10px;padding:10px;height:100px;border-radius: 15px;border: 2px #ddd solid;"></textarea>
+    <button id="btnSubmit" style="margin: 20px" onclick="postFun()">提交到服务端</button>
+<script>
+    function postFun(){
+        $.ajax({
+            url: "http://39.106.25.203:1480/moment/createMomentOnlyText",
+            data: {
+                userId: localStorage.getItem('loginUser'),
+                tag: $('#selectedTag')[0].selectedOptions[0].innerText,
+                text: $('#desc').val(),
+            },
+            type: "POST",
+            success: function (result) {
+                console.log(result)
+                if (result.result.status) {
+                    alert("发送成功！")
+                    window.history.go(-1)
+                } else {
+                    mdui.snackbar({
+                        message: result.result.message
+                    });
+                }
+
+            },
+            error: function (jqXHR, exception) {
+                var msg = '';
+                if (exception === 'timeout') {
+                    msg = '连接超时.';
+                } else if (jqXHR.status === 0) {
+                    msg = '无法连接到服务器.';
+                } else if (jqXHR.status == 404) {
+                    msg = 'Requested page not found. [404]';
+                } else if (jqXHR.status == 500) {
+                    msg = 'Internal Server Error [500].';
+                } else if (exception === 'parsererror') {
+                    msg = 'Requested JSON parse failed.';
+                } else if (exception === 'timeout') {
+                    msg = '连接超时.';
+                } else if (exception === 'abort') {
+                    msg = 'Ajax request aborted.';
+                } else {
+                    msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                }
+                mdui.snackbar({
+                    message: "错误：" + msg
+                });
+            }
+        });
+    }
+</script>
+</body>
+</html>
